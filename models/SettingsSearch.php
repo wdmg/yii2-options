@@ -18,7 +18,7 @@ class SettingsSearch extends Settings
     {
         return [
             [['id'], 'integer'],
-            [['param', 'value', 'default', 'label', 'type'], 'safe'],
+            [['section', 'param', 'value', 'default', 'label', 'type', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 

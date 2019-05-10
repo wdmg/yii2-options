@@ -3,6 +3,10 @@
 namespace wdmg\settings\models;
 
 use Yii;
+use yii\db\Expression;
+use yii\db\ActiveRecord;
+use yii\base\InvalidParamException;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "{{%settings}}".
@@ -17,7 +21,7 @@ use Yii;
  * @property string $created_at
  * @property string $updated_at
  */
-class Settings extends \yii\db\ActiveRecord
+class Settings extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -33,11 +37,14 @@ class Settings extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['section', 'param', 'value', 'default', 'label', 'type'], 'required'],
+            [['param', 'value', 'type'], 'required'],
             [['value', 'default'], 'string'],
+            [['section', 'param'], 'string', 'max' => 128],
+            [['label'], 'string', 'max' => 255],
+            [['type'], 'string', 'max' => 64],
+            ['type', 'in', 'range' => ['string', 'integer', 'boolean']],
+            [['param'], 'unique', 'targetAttribute' => ['section', 'param']],
             [['created_at', 'updated_at'], 'safe'],
-            [['section', 'param', 'label', 'type'], 'string', 'max' => 255],
-            [['param'], 'unique'],
         ];
     }
 
@@ -54,8 +61,25 @@ class Settings extends \yii\db\ActiveRecord
             'default' => Yii::t('app/modules/settings', 'Default'),
             'label' => Yii::t('app/modules/settings', 'Label'),
             'type' => Yii::t('app/modules/settings', 'Type'),
-            'created_at' => Yii::t('app/modules/settings', 'Created At'),
-            'updated_at' => Yii::t('app/modules/settings', 'Updated At'),
+            'created_at' => Yii::t('app/modules/settings', 'Created at'),
+            'updated_at' => Yii::t('app/modules/settings', 'Updated at'),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'created_at',
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
+                ],
+                'value' => new Expression('NOW()'),
+            ],
         ];
     }
 }
