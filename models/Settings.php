@@ -5,6 +5,7 @@ namespace wdmg\settings\models;
 use Yii;
 use yii\db\Expression;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\base\InvalidParamException;
 use yii\behaviors\TimestampBehavior;
 
@@ -42,7 +43,7 @@ class Settings extends ActiveRecord
             [['section', 'param'], 'string', 'max' => 128],
             [['label'], 'string', 'max' => 255],
             [['type'], 'string', 'max' => 64],
-            ['type', 'in', 'range' => ['string', 'integer', 'boolean']],
+            ['type', 'in', 'range' => ['boolean', 'integer', 'float', 'string', 'array', 'object', 'null']],
             [['param'], 'unique', 'targetAttribute' => ['section', 'param']],
             [['created_at', 'updated_at'], 'safe'],
         ];
@@ -81,5 +82,18 @@ class Settings extends ActiveRecord
                 'value' => new Expression('NOW()'),
             ],
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAllSettings()
+    {
+        $settings = static::find()->asArray()->all();
+        return array_merge_recursive(
+            ArrayHelper::map($settings, 'param', 'value', 'section'),
+            ArrayHelper::map($settings, 'param', 'type', 'section'),
+            ArrayHelper::map($settings, 'param', 'default', 'section')
+        );
     }
 }
