@@ -32,6 +32,13 @@ In any case, you can execute the migration and create the initial data, run the 
 # Configure
 To add a module to the project, add the following data in your configuration file:
 
+    'components' => [
+        ...
+        'settings' => [
+            'class' => 'wdmg\settings\components\Settings'
+        ],
+        ...
+    ],
     'modules' => [
         ...
         'settings' => [
@@ -45,6 +52,15 @@ If you have connected the module not via a composer add Bootstrap section:
 
 `
 $config['bootstrap'][] = 'wdmg\settings\Bootstrap';
+`
+
+# Usage
+
+`
+$settings = Yii::$app->settings;
+var_dump($settings->get('system.test1'));
+var_dump($settings->get('test2', 'system'));
+var_dump($settings->get('test3'));
 `
 
 # Routing

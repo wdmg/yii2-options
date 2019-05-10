@@ -20,7 +20,7 @@ class m190510_162417_settings extends Migration
 
         $this->createTable('{{%settings}}', [
             'id' => $this->primaryKey(),
-            'section' => $this->string(128)->notNull(),
+            'section' => $this->string(128)->null(),
             'param' => $this->string(128)->notNull()->unique(),
             'value' => $this->text()->notNull(),
             'default' => $this->text()->notNull(),
