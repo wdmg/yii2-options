@@ -1,6 +1,6 @@
 [![Progress](https://img.shields.io/badge/required-Yii2_v2.0.13-blue.svg)](https://packagist.org/packages/yiisoft/yii2)
 [![Github all releases](https://img.shields.io/github/downloads/wdmg/yii2-settings/total.svg)](https://GitHub.com/wdmg/yii2-settings/releases/)
-[![GitHub version](https://badge.fury.io/gh/wdmg/Fyii2-settings.svg)](https://github.com/wdmg/yii2-settings)
+[![GitHub version](https://badge.fury.io/gh/wdmg/yii2-settings.svg)](https://github.com/wdmg/yii2-settings)
 ![Progress](https://img.shields.io/badge/progress-in_development-red.svg)
 [![GitHub license](https://img.shields.io/github/license/wdmg/yii2-settings.svg)](https://github.com/wdmg/yii2-settings/blob/master/LICENSE)
 
