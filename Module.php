@@ -142,7 +142,7 @@ class Module extends \yii\base\Module
     public function dashboardNavItems()
     {
         return [
-            'label' => Yii::t('app/modules/settings', 'Messages'),
+            'label' => Yii::t('app/modules/settings', 'Settings'),
             'url' => [$this->routePrefix . '/settings/'],
             'active' => in_array(\Yii::$app->controller->module->id, ['settings'])
         ];
