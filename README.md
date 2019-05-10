@@ -56,12 +56,13 @@ $config['bootstrap'][] = 'wdmg\settings\Bootstrap';
 
 # Usage
 
-`
-$settings = Yii::$app->settings;
-var_dump($settings->get('system.test1'));
-var_dump($settings->get('test2', 'system'));
-var_dump($settings->get('test3'));
-`
+    <?php
+        $settings = Yii::$app->settings;
+        $value1 = $settings->get('system.test1');
+        $value2 = $settings->get('test2', 'system');
+        $value3 = $settings->get('test3');
+    ?>
+    
 
 # Routing
 Use the `Module::dashboardNavItems()` method of the module to generate a navigation items list for NavBar, like this:
@@ -78,4 +79,5 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [in progress development]
+* v.1.0.1 - Added settings component
 * v.1.0.0 - Added base migrations
