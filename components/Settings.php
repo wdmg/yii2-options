@@ -4,6 +4,7 @@ namespace wdmg\settings\components;
 
 use Yii;
 use yii\base\Component;
+use yii\base\InvalidArgumentException;
 
 class Settings extends Component
 {
@@ -57,6 +58,7 @@ class Settings extends Component
                     return $default;
                 }
             } else {
+                throw new InvalidArgumentException('Undefined parameter `'.$param.'`');
                 return null;
             }
         }

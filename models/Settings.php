@@ -6,7 +6,7 @@ use Yii;
 use yii\db\Expression;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
-use yii\base\InvalidParamException;
+use yii\base\InvalidArgumentException;
 use yii\behaviors\TimestampBehavior;
 
 /**
