@@ -8,11 +8,14 @@ use Yii;
  * This is the model class for table "{{%settings}}".
  *
  * @property int $id
+ * @property string $section
  * @property string $param
  * @property string $value
  * @property string $default
  * @property string $label
  * @property string $type
+ * @property string $created_at
+ * @property string $updated_at
  */
 class Settings extends \yii\db\ActiveRecord
 {
@@ -30,10 +33,10 @@ class Settings extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['param', 'value', 'default', 'label', 'type'], 'required'],
+            [['section', 'param', 'value', 'default', 'label', 'type'], 'required'],
             [['value', 'default'], 'string'],
-            [['param', 'type'], 'string', 'max' => 128],
-            [['label'], 'string', 'max' => 255],
+            [['created_at', 'updated_at'], 'safe'],
+            [['section', 'param', 'label', 'type'], 'string', 'max' => 255],
             [['param'], 'unique'],
         ];
     }
@@ -45,11 +48,14 @@ class Settings extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app/modules/settings', 'ID'),
+            'section' => Yii::t('app/modules/settings', 'Section'),
             'param' => Yii::t('app/modules/settings', 'Param'),
             'value' => Yii::t('app/modules/settings', 'Value'),
             'default' => Yii::t('app/modules/settings', 'Default'),
             'label' => Yii::t('app/modules/settings', 'Label'),
             'type' => Yii::t('app/modules/settings', 'Type'),
+            'created_at' => Yii::t('app/modules/settings', 'Created At'),
+            'updated_at' => Yii::t('app/modules/settings', 'Updated At'),
         ];
     }
 }

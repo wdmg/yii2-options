@@ -19,12 +19,15 @@ class m190510_162417_settings extends Migration
         }
 
         $this->createTable('{{%settings}}', [
-            'id'=> $this->primaryKey(11),
-            'param' => $this->string(128)->notNull()->unique(),
+            'id' => $this->primaryKey(),
+            'section' => $this->string(255)->notNull(),
+            'param' => $this->string(255)->notNull()->unique(),
             'value' => $this->text()->notNull(),
             'default' => $this->text()->notNull(),
             'label' => $this->string(255)->notNull(),
-            'type' => $this->string(128)->notNull()
+            'type' => $this->string(255)->notNull(),
+            'created_at' => $this->dateTime()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
+            'updated_at' => $this->datetime()->defaultExpression('CURRENT_TIMESTAMP'),
         ], $tableOptions);
 
     }
