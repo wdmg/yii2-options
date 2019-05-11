@@ -2,6 +2,7 @@ Changelog
 =========
 
 ## 1.0.1 (2019-05-11)
+ * Added get/set methods
  * Added settings component
  
 ## 1.0.0 (2019-05-10)
