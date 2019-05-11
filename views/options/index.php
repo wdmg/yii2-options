@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel wdmg\options\models\SettingsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app/modules/options', 'Settings');
+$this->title = Yii::t('app/modules/options', 'Options');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="options-index">
@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app/modules/options', 'Create Settings'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app/modules/options', 'Create option'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([

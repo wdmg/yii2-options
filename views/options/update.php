@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model wdmg\options\models\Settings */
 
-$this->title = Yii::t('app/modules/options', 'Update Settings: {name}', [
+$this->title = Yii::t('app/modules/options', 'Update option: {name}', [
     'name' => $model->id,
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/options', 'Settings'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/options', 'Options'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app/modules/options', 'Update');
 ?>

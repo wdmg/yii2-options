@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model wdmg\options\models\Settings */
 
-$this->title = Yii::t('app/modules/options', 'Create Settings');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/options', 'Settings'), 'url' => ['index']];
+$this->title = Yii::t('app/modules/options', 'Create option');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/options', 'Options'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="options-create">
