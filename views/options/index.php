@@ -27,8 +27,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'label',
-            'param',
+            'section',
+            [
+                'attribute' => 'label',
+                'format' => 'html',
+                'value' => function($data) {
+                    return $data->label.'<br/><em class="text-muted">'.$data->param.'</em>';
+                }
+            ],
             'value:ntext',
             'default:ntext',
             'type',
