@@ -9,7 +9,7 @@ use wdmg\options\models\Options;
 /**
  * OptionsSearch represents the model behind the search form of `wdmg\options\models\Options`.
  */
-class OptionsSearch extends Settings
+class OptionsSearch extends Options
 {
     /**
      * {@inheritdoc}
@@ -69,4 +69,5 @@ class OptionsSearch extends Settings
 
         return $dataProvider;
     }
+
 }

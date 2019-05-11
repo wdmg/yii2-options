@@ -11,6 +11,12 @@ return [
     'Type' => "Тип",
     'Created at' => "Создано",
     'Updated at' => "Обновлено",
+
+    'Create option' => "Добавить опцию",
+    'Update option: {name}' => "Редактирование опции: {name}",
+    'Save' => "Сохранить",
+    'Update' => "Обновить",
+    'Delete' => "Удалить",
 ];
 
 ?>
