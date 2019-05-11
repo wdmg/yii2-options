@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m190510_162417_settings
+ * Class m190510_162417_options
  */
-class m190510_162417_settings extends Migration
+class m190510_162417_options extends Migration
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class m190510_162417_settings extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%settings}}', [
+        $this->createTable('{{%options}}', [
             'id' => $this->primaryKey(),
             'section' => $this->string(128)->null(),
             'param' => $this->string(128)->notNull()->unique(),
@@ -37,8 +37,8 @@ class m190510_162417_settings extends Migration
      */
     public function safeDown()
     {
-        $this->truncateTable('{{%settings}}');
-        $this->dropTable('{{%settings}}');
+        $this->truncateTable('{{%options}}');
+        $this->dropTable('{{%options}}');
     }
 
 }

@@ -1,11 +1,11 @@
 [![Progress](https://img.shields.io/badge/required-Yii2_v2.0.13-blue.svg)](https://packagist.org/packages/yiisoft/yii2)
-[![Github all releases](https://img.shields.io/github/downloads/wdmg/yii2-settings/total.svg)](https://GitHub.com/wdmg/yii2-settings/releases/)
-[![GitHub version](https://badge.fury.io/gh/wdmg/yii2-settings.svg)](https://github.com/wdmg/yii2-settings)
+[![Github all releases](https://img.shields.io/github/downloads/wdmg/yii2-options/total.svg)](https://GitHub.com/wdmg/yii2-options/releases/)
+[![GitHub version](https://badge.fury.io/gh/wdmg/yii2-options.svg)](https://github.com/wdmg/yii2-options)
 ![Progress](https://img.shields.io/badge/progress-in_development-red.svg)
-[![GitHub license](https://img.shields.io/github/license/wdmg/yii2-settings.svg)](https://github.com/wdmg/yii2-settings/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/wdmg/yii2-options.svg)](https://github.com/wdmg/yii2-options/blob/master/LICENSE)
 
-# Yii2 Settings Module
-Module storage application settings in the database for Yii2
+# Yii2 Options Module
+Storage application options (settings) in the database for Yii2
 
 # Requirements
 * PHP 5.6 or higher
@@ -14,11 +14,11 @@ Module storage application settings in the database for Yii2
 # Installation
 To install the module, run the following command in the console:
 
-`$ composer require "wdmg/yii2-settings"`
+`$ composer require "wdmg/yii2-options"`
 
 After configure db connection, run the following command in the console:
 
-`$ php yii settings/init`
+`$ php yii options/init`
 
 And select the operation you want to perform:
   1) Apply all module migrations
@@ -27,22 +27,22 @@ And select the operation you want to perform:
 # Migrations
 In any case, you can execute the migration and create the initial data, run the following command in the console:
 
-`$ php yii migrate --migrationPath=@vendor/wdmg/yii2-settings/migrations`
+`$ php yii migrate --migrationPath=@vendor/wdmg/yii2-options/migrations`
 
 # Configure
 To add a module to the project, add the following data in your configuration file:
 
     'components' => [
         ...
-        'settings' => [
-            'class' => 'wdmg\settings\components\Settings'
+        'options' => [
+            'class' => 'wdmg\options\components\Options'
         ],
         ...
     ],
     'modules' => [
         ...
-        'settings' => [
-            'class' => 'wdmg\settings\Module',
+        'options' => [
+            'class' => 'wdmg\options\Module',
             'routePrefix' => 'admin'
         ],
         ...
@@ -51,16 +51,16 @@ To add a module to the project, add the following data in your configuration fil
 If you have connected the module not via a composer add Bootstrap section:
 
 `
-$config['bootstrap'][] = 'wdmg\settings\Bootstrap';
+$config['bootstrap'][] = 'wdmg\options\Bootstrap';
 `
 
 # Usage
 
     <?php
-        $settings = Yii::$app->settings;
-        $value1 = $settings->get('system.test1');
-        $value2 = $settings->get('test2', 'system');
-        $value3 = $settings->get('test3');
+        $options = Yii::$app->options;
+        $value1 = $options->get('system.test1');
+        $value2 = $options->get('test2', 'system');
+        $value3 = $options->get('test3');
     ?>
     
 
@@ -72,12 +72,12 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
         'options' => ['class' => 'navbar-nav navbar-right'],
             'label' => 'Modules',
             'items' => [
-                Yii::$app->getModule('settings')->dashboardNavItems(),
+                Yii::$app->getModule('options')->dashboardNavItems(),
                 ...
             ]
         ]);
     ?>
 
 # Status and version [in progress development]
-* v.1.0.1 - Added settings component and methods
+* v.1.0.1 - Added component and methods
 * v.1.0.0 - Added base migrations

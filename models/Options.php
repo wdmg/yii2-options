@@ -1,6 +1,6 @@
 <?php
 
-namespace wdmg\settings\models;
+namespace wdmg\options\models;
 
 use Yii;
 use yii\db\Expression;
@@ -11,7 +11,7 @@ use yii\base\InvalidArgumentException;
 use yii\behaviors\TimestampBehavior;
 
 /**
- * This is the model class for table "{{%settings}}".
+ * This is the model class for table "{{%options}}".
  *
  * @property int $id
  * @property string $section
@@ -23,14 +23,14 @@ use yii\behaviors\TimestampBehavior;
  * @property string $created_at
  * @property string $updated_at
  */
-class Settings extends ActiveRecord
+class Options extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%settings}}';
+        return '{{%options}}';
     }
 
     /**
@@ -56,15 +56,15 @@ class Settings extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app/modules/settings', 'ID'),
-            'section' => Yii::t('app/modules/settings', 'Section'),
-            'param' => Yii::t('app/modules/settings', 'Param'),
-            'value' => Yii::t('app/modules/settings', 'Value'),
-            'default' => Yii::t('app/modules/settings', 'Default'),
-            'label' => Yii::t('app/modules/settings', 'Label'),
-            'type' => Yii::t('app/modules/settings', 'Type'),
-            'created_at' => Yii::t('app/modules/settings', 'Created at'),
-            'updated_at' => Yii::t('app/modules/settings', 'Updated at'),
+            'id' => Yii::t('app/modules/options', 'ID'),
+            'section' => Yii::t('app/modules/options', 'Section'),
+            'param' => Yii::t('app/modules/options', 'Param'),
+            'value' => Yii::t('app/modules/options', 'Value'),
+            'default' => Yii::t('app/modules/options', 'Default'),
+            'label' => Yii::t('app/modules/options', 'Label'),
+            'type' => Yii::t('app/modules/options', 'Type'),
+            'created_at' => Yii::t('app/modules/options', 'Created at'),
+            'updated_at' => Yii::t('app/modules/options', 'Updated at'),
         ];
     }
 
@@ -88,20 +88,20 @@ class Settings extends ActiveRecord
     /**
      * @inheritdoc
      */
-    public function getAllSettings()
+    public function getAllOptions()
     {
-        $settings = static::find()->asArray()->all();
+        $options = static::find()->asArray()->all();
         return array_merge_recursive(
-            ArrayHelper::map($settings, 'param', 'value', 'section'),
-            ArrayHelper::map($settings, 'param', 'type', 'section'),
-            ArrayHelper::map($settings, 'param', 'default', 'section')
+            ArrayHelper::map($options, 'param', 'value', 'section'),
+            ArrayHelper::map($options, 'param', 'type', 'section'),
+            ArrayHelper::map($options, 'param', 'default', 'section')
         );
     }
 
     /**
      * @inheritdoc
      */
-    public function setSetting($section, $param, $value, $type = null)
+    public function setOption($section, $param, $value, $type = null)
     {
         $model = static::findOne(['section' => $section, 'param' => $param]);
 

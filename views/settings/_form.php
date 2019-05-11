@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model wdmg\settings\models\Settings */
+/* @var $model wdmg\options\models\Settings */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="settings-form">
+<div class="options-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -23,7 +23,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'type')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app/modules/settings', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Yii::t('app/modules/options', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

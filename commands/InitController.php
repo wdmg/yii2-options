@@ -1,6 +1,6 @@
 <?php
 
-namespace wdmg\settings\commands;
+namespace wdmg\options\commands;
 
 use Yii;
 use yii\console\Controller;
@@ -22,7 +22,7 @@ class InitController extends Controller
         $welcome =
             '╔════════════════════════════════════════════════╗'. "\n" .
             '║                                                ║'. "\n" .
-            '║            SETTINGS MODULE, v.'.$version.'            ║'. "\n" .
+            '║            OPTIONS  MODULE, v.'.$version.'            ║'. "\n" .
             '║          by Alexsander Vyshnyvetskyy           ║'. "\n" .
             '║         (c) 2019 W.D.M.Group, Ukraine          ║'. "\n" .
             '║                                                ║'. "\n" .
@@ -35,9 +35,9 @@ class InitController extends Controller
 
         $selected = trim(fgets(STDIN));
         if ($selected == "1") {
-            Yii::$app->runAction('migrate/up', ['migrationPath' => '@vendor/wdmg/yii2-settings/migrations', 'interactive' => true]);
+            Yii::$app->runAction('migrate/up', ['migrationPath' => '@vendor/wdmg/yii2-options/migrations', 'interactive' => true]);
         } else if($selected == "2") {
-            Yii::$app->runAction('migrate/down', ['migrationPath' => '@vendor/wdmg/yii2-settings/migrations', 'interactive' => true]);
+            Yii::$app->runAction('migrate/down', ['migrationPath' => '@vendor/wdmg/yii2-options/migrations', 'interactive' => true]);
         } else {
             echo $this->ansiFormat("Error! Your selection has not been recognized.\n\n", Console::FG_RED);
             return ExitCode::UNSPECIFIED_ERROR;

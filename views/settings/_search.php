@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model wdmg\settings\models\SettingsSearch */
+/* @var $model wdmg\options\models\SettingsSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="settings-search">
+<div class="options-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -31,8 +31,8 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'type') ?>
 
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app/modules/settings', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app/modules/settings', 'Reset'), ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton(Yii::t('app/modules/options', 'Search'), ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton(Yii::t('app/modules/options', 'Reset'), ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

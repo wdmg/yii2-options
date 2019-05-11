@@ -3,16 +3,16 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model wdmg\settings\models\Settings */
+/* @var $model wdmg\options\models\Settings */
 
-$this->title = Yii::t('app/modules/settings', 'Update Settings: {name}', [
+$this->title = Yii::t('app/modules/options', 'Update Settings: {name}', [
     'name' => $model->id,
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/settings', 'Settings'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/options', 'Settings'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app/modules/settings', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('app/modules/options', 'Update');
 ?>
-<div class="settings-update">
+<div class="options-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

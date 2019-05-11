@@ -1,15 +1,15 @@
 <?php
 
-namespace wdmg\settings\models;
+namespace wdmg\options\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use wdmg\settings\models\Settings;
+use wdmg\options\models\Options;
 
 /**
- * SettingsSearch represents the model behind the search form of `wdmg\settings\models\Settings`.
+ * OptionsSearch represents the model behind the search form of `wdmg\options\models\Options`.
  */
-class SettingsSearch extends Settings
+class OptionsSearch extends Settings
 {
     /**
      * {@inheritdoc}
@@ -40,7 +40,7 @@ class SettingsSearch extends Settings
      */
     public function search($params)
     {
-        $query = Settings::find();
+        $query = Options::find();
 
         // add conditions that should always apply here
 

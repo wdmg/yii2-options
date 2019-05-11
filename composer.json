@@ -1,14 +1,14 @@
 {
-  "name": "wdmg/yii2-settings",
-  "description": "Storage application settings in the database for Yii2",
-  "keywords": ["yii2", "yii2-settings", "application settings", "wdmg"],
+  "name": "wdmg/yii2-options",
+  "description": "Storage application options (settings) in the database for Yii2",
+  "keywords": ["yii2", "yii2-options", "application settings", "application options", "wdmg"],
   "type": "yii2-extension",
   "license": "MIT",
-  "version": "1.0.1",
-  "homepage": "https://github.com/wdmg/yii2-settings",
+  "version": "1.1.0",
+  "homepage": "https://github.com/wdmg/yii2-options",
   "support": {
-    "source": "https://github.com/wdmg/yii2-settings",
-    "issues": "https://github.com/wdmg/yii2-settings/issues"
+    "source": "https://github.com/wdmg/yii2-options",
+    "issues": "https://github.com/wdmg/yii2-options/issues"
   },
   "authors": [
     {
@@ -26,10 +26,10 @@
   "minimum-stability": "dev",
   "autoload": {
     "psr-4": {
-      "wdmg\\settings\\": ""
+      "wdmg\\options\\": ""
     }
   },
   "extra": {
-    "bootstrap": "wdmg\\settings\\Bootstrap"
+    "bootstrap": "wdmg\\options\\Bootstrap"
   }
 }

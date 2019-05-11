@@ -1,12 +1,12 @@
 <?php
 
-namespace wdmg\settings;
+namespace wdmg\options;
 
 /**
- * Yii2 settings
+ * Yii2 Options
  *
  * @category        Module
- * @version         1.0.1
+ * @version         1.1.0
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
  * @link            https://github.com/wdmg/yii2-messages
  * @copyright       Copyright (c) 2019 W.D.M.Group, Ukraine
@@ -17,14 +17,14 @@ namespace wdmg\settings;
 use Yii;
 
 /**
- * Settings module definition class
+ * Options module definition class
  */
 class Module extends \yii\base\Module
 {
     /**
      * {@inheritdoc}
      */
-    public $controllerNamespace = 'wdmg\settings\controllers';
+    public $controllerNamespace = 'wdmg\options\controllers';
 
     /**
      * {@inheritdoc}
@@ -65,7 +65,7 @@ class Module extends \yii\base\Module
 
         // Set controller namespace for console commands
         if (Yii::$app instanceof \yii\console\Application)
-            $this->controllerNamespace = 'wdmg\settings\commands';
+            $this->controllerNamespace = 'wdmg\options\commands';
 
         // Set current version of module
         $this->setVersion($this->version);
@@ -103,10 +103,10 @@ class Module extends \yii\base\Module
     // Registers translations for the module
     public function registerTranslations()
     {
-        Yii::$app->i18n->translations['app/modules/settings'] = [
+        Yii::$app->i18n->translations['app/modules/options'] = [
             'class' => 'yii\i18n\PhpMessageSource',
             'sourceLanguage' => 'en-US',
-            'basePath' => '@vendor/wdmg/yii2-settings/messages',
+            'basePath' => '@vendor/wdmg/yii2-options/messages',
             'on missingTranslation' => function($event) {
 
                 if (YII_ENV == 'dev')
@@ -118,7 +118,7 @@ class Module extends \yii\base\Module
 
     public static function t($category, $message, $params = [], $language = null)
     {
-        return Yii::t('app/modules/settings' . $category, $message, $params, $language);
+        return Yii::t('app/modules/options' . $category, $message, $params, $language);
     }
 
     /**
@@ -142,9 +142,9 @@ class Module extends \yii\base\Module
     public function dashboardNavItems()
     {
         return [
-            'label' => Yii::t('app/modules/settings', 'Settings'),
-            'url' => [$this->routePrefix . '/settings/'],
-            'active' => in_array(\Yii::$app->controller->module->id, ['settings'])
+            'label' => Yii::t('app/modules/options', 'Options'),
+            'url' => [$this->routePrefix . '/options/'],
+            'active' => in_array(\Yii::$app->controller->module->id, ['options'])
         ];
     }
 }

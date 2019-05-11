@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'Settings' => "Настройки",
+    'Options' => "Опции",
     'ID' => "ИД",
     'Section' => "Секция",
     'Param' => "Параметр",

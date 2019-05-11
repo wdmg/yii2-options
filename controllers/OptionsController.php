@@ -1,18 +1,18 @@
 <?php
 
-namespace wdmg\settings\controllers;
+namespace wdmg\options\controllers;
 
 use Yii;
-use wdmg\settings\models\Settings;
-use wdmg\settings\models\SettingsSearch;
+use wdmg\options\models\Options;
+use wdmg\options\models\OptionsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * SettingsController implements the CRUD actions for Settings model.
+ * OptionsController implements the CRUD actions for Settings model.
  */
-class SettingsController extends Controller
+class OptionsController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,12 +30,12 @@ class SettingsController extends Controller
     }
 
     /**
-     * Lists all Settings models.
+     * Lists all Options models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SettingsSearch();
+        $searchModel = new OptionsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Displays a single Settings model.
+     * Displays a single Option model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -58,13 +58,13 @@ class SettingsController extends Controller
     }
 
     /**
-     * Creates a new Settings model.
+     * Creates a new Option model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Settings();
+        $model = new Options();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -76,7 +76,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Updates an existing Settings model.
+     * Updates an existing Option model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -96,7 +96,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Deletes an existing Settings model.
+     * Deletes an existing Option model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -110,7 +110,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Finds the Settings model based on its primary key value.
+     * Finds the Option model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
      * @return Settings the loaded model
@@ -118,10 +118,10 @@ class SettingsController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Settings::findOne($id)) !== null) {
+        if (($model = Options::findOne($id)) !== null) {
             return $model;
         }
 
-        throw new NotFoundHttpException(Yii::t('app/modules/settings', 'The requested page does not exist.'));
+        throw new NotFoundHttpException(Yii::t('app/modules/options', 'The requested page does not exist.'));
     }
 }

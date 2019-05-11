@@ -1,18 +1,18 @@
 <?php
 
-namespace wdmg\settings\components;
+namespace wdmg\options\components;
 
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidArgumentException;
 
-class Settings extends Component
+class Options extends Component
 {
 
     protected $model;
     public $cache = 'cache';
-    public $cacheKey = 'wdmg/settings';
-    private $settings = null;
+    public $cacheKey = 'wdmg/options';
+    private $options = null;
 
     /**
      * Initialize the component
@@ -23,7 +23,7 @@ class Settings extends Component
     {
         parent::init();
 
-        $this->model = new \wdmg\settings\models\Settings;
+        $this->model = new \wdmg\options\models\Options;
         if (is_string($this->cache))
             $this->cache = Yii::$app->get($this->cache, false);
 
@@ -39,20 +39,20 @@ class Settings extends Component
             }
         }
 
-        $data = $this->getSettings();
-        if (!empty($data[$section][$param][0]) && isset($data[$section][$param][0])) {
-            $value = $data[$section][$param][0];
-            if (isset($data[$section][$param][1])) {
-                $type = $data[$section][$param][1];
+        $options = $this->getOptions();
+        if (!empty($options[$section][$param][0]) && isset($options[$section][$param][0])) {
+            $value = $options[$section][$param][0];
+            if (isset($options[$section][$param][1])) {
+                $type = $options[$section][$param][1];
                 return $this->setType($value, $type);
             } else {
                 return $value;
             }
         } else {
-            if (!empty($data[$section][$param][2])) {
-                $default = $data[$section][$param][2];
-                if (isset($data[$section][$param][1])) {
-                    $type = $data[$section][$param][1];
+            if (!empty($options[$section][$param][2])) {
+                $default = $options[$section][$param][2];
+                if (isset($options[$section][$param][1])) {
+                    $type = $options[$section][$param][1];
                     return $this->setType($default, $type);
                 } else {
                     return $default;
@@ -74,28 +74,28 @@ class Settings extends Component
             }
         }
 
-        if ($this->model->setSetting($section, $param, $value, $type)) {
+        if ($this->model->setOption($section, $param, $value, $type)) {
             $this->clearCache();
             return true;
         }
         return false;
     }
 
-    private function getSettings()
+    private function getOptions()
     {
-        if ($this->settings === null) {
+        if ($this->options === null) {
             if ($this->cache instanceof Cache) {
-                $data = $this->cache->get($this->cacheKey);
-                if ($data === false) {
-                    $data = $this->model->getAllSettings();
-                    $this->cache->set($this->cacheKey, $data);
+                $options = $this->cache->get($this->cacheKey);
+                if ($options === false) {
+                    $options = $this->model->getAllOptions();
+                    $this->cache->set($this->cacheKey, $options);
                 }
             } else {
-                $data = $this->model->getAllSettings();
+                $options = $this->model->getAllOptions();
             }
-            $this->settings = $data;
+            $this->options = $options;
         }
-        return $this->settings;
+        return $this->options;
     }
 
     private function setType($var, $type = null)
@@ -106,7 +106,7 @@ class Settings extends Component
 
     public function clearCache()
     {
-        $this->settings = null;
+        $this->options = null;
         if ($this->cache instanceof Cache) {
             return $this->cache->delete($this->cacheKey);
         }

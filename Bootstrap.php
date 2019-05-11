@@ -1,6 +1,6 @@
 <?php
 
-namespace wdmg\settings;
+namespace wdmg\options;
 
 /**
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
@@ -17,7 +17,7 @@ class Bootstrap implements BootstrapInterface
     public function bootstrap($app)
     {
         // Get the module instance
-        $module = Yii::$app->getModule('settings');
+        $module = Yii::$app->getModule('options');
 
         // Get URL path prefix if exist
         $prefix = (isset($module->routePrefix) ? $module->routePrefix . '/' : '');
@@ -25,9 +25,9 @@ class Bootstrap implements BootstrapInterface
         // Add module URL rules
         $app->getUrlManager()->addRules(
             [
-                $prefix . '<module:settings>/' => '<module>/settings/index',
-                $prefix . '<module:settings>/<controller>/' => '<module>/<controller>',
-                $prefix . '<module:settings>/<controller>/<action>' => '<module>/<controller>/<action>',
+                $prefix . '<module:options>/' => '<module>/options/index',
+                $prefix . '<module:options>/<controller>/' => '<module>/<controller>',
+                $prefix . '<module:options>/<controller>/<action>' => '<module>/<controller>/<action>',
             ],
             true
         );

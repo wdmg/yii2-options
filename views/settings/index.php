@@ -4,20 +4,20 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
-/* @var $searchModel wdmg\settings\models\SettingsSearch */
+/* @var $searchModel wdmg\options\models\SettingsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app/modules/settings', 'Settings');
+$this->title = Yii::t('app/modules/options', 'Settings');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="settings-index">
+<div class="options-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app/modules/settings', 'Create Settings'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app/modules/options', 'Create Settings'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
