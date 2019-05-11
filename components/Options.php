@@ -64,7 +64,7 @@ class Options extends Component
         }
     }
 
-    public function set($param, $value, $section = null, $type = null)
+    public function set($param, $value, $section = null, $type = null, $label = null)
     {
         if (is_null($section) || preg_match('/\./', $param)) {
             $split = explode('.', $param, 2);
@@ -74,7 +74,7 @@ class Options extends Component
             }
         }
 
-        if ($this->model->setOption($section, $param, $value, $type)) {
+        if ($this->model->setOption($section, $param, $value, $type, $label)) {
             $this->clearCache();
             return true;
         }
