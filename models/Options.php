@@ -101,7 +101,7 @@ class Options extends ActiveRecord
     /**
      * @inheritdoc
      */
-    public function setOption($section, $param, $value, $type = null)
+    public function setOption($section, $param, $value, $type = null, $label = null)
     {
         $model = static::findOne(['section' => $section, 'param' => $param]);
 
@@ -116,6 +116,11 @@ class Options extends ActiveRecord
             $model->type = $type;
         elseif (!isset($model->type))
             $model->type = $this->getTypeByValue($value);
+
+        if ($label !== null)
+            $model->label = $label;
+        elseif (!isset($model->label))
+            $model->label = ucfirst(strtolower(implode(preg_split('/(?<=\\w)(?=[A-Z])/', $param, -1, PREG_SPLIT_NO_EMPTY), " ")));
 
         return $model->save();
     }
