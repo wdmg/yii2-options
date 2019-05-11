@@ -64,6 +64,23 @@ class Settings extends Component
         }
     }
 
+    public function set($param, $value, $section = null, $type = null)
+    {
+        if (is_null($section) || preg_match('/\./', $param)) {
+            $split = explode('.', $param, 2);
+            if (count($split) > 1) {
+                $section = $split[0];
+                $param = $split[1];
+            }
+        }
+
+        if ($this->model->setSetting($section, $param, $value, $type)) {
+            $this->clearCache();
+            return true;
+        }
+        return false;
+    }
+
     private function getSettings()
     {
         if ($this->settings === null) {
@@ -87,6 +104,14 @@ class Settings extends Component
         return $var;
     }
 
+    public function clearCache()
+    {
+        $this->settings = null;
+        if ($this->cache instanceof Cache) {
+            return $this->cache->delete($this->cacheKey);
+        }
+        return true;
+    }
 }
 
 ?>

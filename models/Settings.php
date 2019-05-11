@@ -6,6 +6,7 @@ use Yii;
 use yii\db\Expression;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 use yii\base\InvalidArgumentException;
 use yii\behaviors\TimestampBehavior;
 
@@ -95,5 +96,61 @@ class Settings extends ActiveRecord
             ArrayHelper::map($settings, 'param', 'type', 'section'),
             ArrayHelper::map($settings, 'param', 'default', 'section')
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setSetting($section, $param, $value, $type = null)
+    {
+        $model = static::findOne(['section' => $section, 'param' => $param]);
+
+        if ($model === null)
+            $model = new static();
+
+        $model->section = $section;
+        $model->param = $param;
+        $model->value = strval($value);
+
+        if ($type !== null)
+            $model->type = $type;
+        elseif (!isset($model->type))
+            $model->type = $this->getTypeByValue($value);
+
+        return $model->save();
+    }
+
+    /**
+     * @param $value
+     * @return string
+     */
+    protected function getTypeByValue($value)
+    {
+
+        if (filter_var($value, FILTER_VALIDATE_BOOLEAN))
+            return 'boolean';
+
+        if (filter_var($value, FILTER_VALIDATE_INT))
+            return 'integer';
+
+        if (filter_var($value, FILTER_VALIDATE_FLOAT))
+            return 'float';
+
+        $type = gettype($value);
+        if ($type === 'object' && !empty($value)) {
+
+            $error = false;
+            try {
+                Json::decode($value);
+            } catch (InvalidArgumentException $e) {
+                $error = true;
+            }
+
+            if (!$error)
+                $type = 'object';
+
+        }
+
+        return $type;
     }
 }
