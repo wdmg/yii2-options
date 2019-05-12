@@ -10,6 +10,7 @@ namespace wdmg\options;
 
 use yii\base\BootstrapInterface;
 use Yii;
+use wdmg\options\components\Options;
 
 
 class Bootstrap implements BootstrapInterface
@@ -31,5 +32,11 @@ class Bootstrap implements BootstrapInterface
             ],
             true
         );
+
+        // Autoload options from db to app params
+        if ($module->autoloadOptions) {
+            $component = new Options;
+            $component->autoload();
+        }
     }
 }

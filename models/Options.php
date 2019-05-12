@@ -88,14 +88,21 @@ class Options extends ActiveRecord
     /**
      * @inheritdoc
      */
-    public function getAllOptions()
+    public function getAllOptions($asArray = true)
     {
-        $options = static::find()->asArray()->all();
-        return array_merge_recursive(
-            ArrayHelper::map($options, 'param', 'value', 'section'),
-            ArrayHelper::map($options, 'param', 'type', 'section'),
-            ArrayHelper::map($options, 'param', 'default', 'section')
-        );
+        if($asArray)
+            $options = static::find()->asArray()->all();
+        else
+            $options = static::find()->all();
+
+        if($asArray) {
+            return array_merge_recursive(
+                ArrayHelper::map($options, 'param', 'value', 'section'),
+                ArrayHelper::map($options, 'param', 'type', 'section'),
+                ArrayHelper::map($options, 'param', 'default', 'section')
+            );
+        }
+        return $options;
     }
 
     /**
@@ -105,8 +112,11 @@ class Options extends ActiveRecord
     {
         $model = static::findOne(['section' => $section, 'param' => $param]);
 
-        if ($model === null)
+        if ($model === null) {
             $model = new static();
+            $model->default = strval($value);
+        }
+
 
         $model->section = $section;
         $model->param = $param;

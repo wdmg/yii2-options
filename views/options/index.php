@@ -27,12 +27,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'section',
             [
-                'attribute' => 'label',
+                'attribute' => 'param',
+                'label' => Yii::t('app/modules/options', 'Label and param'),
+                'filter' => true,
                 'format' => 'html',
                 'value' => function($data) {
-                    return $data->label.'<br/><em class="text-muted">'.$data->param.'</em>';
+                    if ($data->section)
+                        return $data->label.'<br/><em class="text-muted">'.$data->section.'.'.$data->param.'</em>';
+                    else
+                        return $data->label.'<br/><em class="text-muted">'.$data->param.'</em>';
                 }
             ],
             'value:ntext',

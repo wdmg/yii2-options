@@ -43,6 +43,7 @@ To add a module to the project, add the following data in your configuration fil
         ...
         'options' => [
             'class' => 'wdmg\options\Module',
+            'autoloadOptions' => true,
             'routePrefix' => 'admin'
         ],
         ...
@@ -57,10 +58,23 @@ $config['bootstrap'][] = 'wdmg\options\Bootstrap';
 # Usage
 
     <?php
+        
+        // Get app options (default)
+        $options = Yii::$app->params;
+        $value = $options['adminEmail'];
+
+        // Get app options (from DB)
         $options = Yii::$app->options;
-        $value1 = $options->get('system.test1');
-        $value2 = $options->get('test2', 'system');
-        $value3 = $options->get('test3');
+        $value = $options->get('adminEmail');
+        // or
+        $value = $options->adminEmail;
+
+        // Set app options
+        $options = Yii::$app->options;
+        $options->set('adminEmail', "admin@example.com");
+        // or
+        $options->adminEmail = "admin@example.com";
+        
     ?>
     
 
@@ -79,6 +93,7 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [in progress development]
+* v.1.2.0 - Added autoload options from db to app
 * v.1.1.0 - Rename module and repository
 * v.1.0.1 - Added component and methods
 * v.1.0.0 - Added base migrations

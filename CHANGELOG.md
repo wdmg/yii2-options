@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.2.0 (2019-05-12)
+ * Added autoload options from db to app
+ 
 ## 1.1.0 (2019-05-11)
  * Refactoring: rename module and methods
  

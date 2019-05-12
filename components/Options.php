@@ -2,9 +2,23 @@
 
 namespace wdmg\options\components;
 
+
+/**
+ * Yii2 Options
+ *
+ * @category        Component
+ * @version         1.2.0
+ * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
+ * @link            https://github.com/wdmg/yii2-messages
+ * @copyright       Copyright (c) 2019 W.D.M.Group, Ukraine
+ * @license         https://opensource.org/licenses/MIT Massachusetts Institute of Technology (MIT) License
+ *
+ */
+
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidArgumentException;
+use yii\helpers\ArrayHelper;
 
 class Options extends Component
 {
@@ -24,14 +38,51 @@ class Options extends Component
         parent::init();
 
         $this->model = new \wdmg\options\models\Options;
-        if (is_string($this->cache))
+        if (is_string($this->cache)) {
             $this->cache = Yii::$app->get($this->cache, false);
+        }
 
+    }
+
+    public function autoload() {
+
+        $params = [];
+        $data = $this->getOptions();
+        foreach ($data as $section => $options) {
+            foreach ($options as $param => $value) {
+                if (!empty($section))
+                    $params[$section.'.'.$param] = $value[0];
+                else
+                    $params[$param] = $value[0];
+            }
+        }
+        Yii::$app->params = ArrayHelper::merge(Yii::$app->params, $params);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __get($param) {
+        $value = $this->get($param);
+        if(isset($value))
+            return $value;
+
+        return parent::__get($param);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __set($param, $value) {
+        if($this->set($param, $value))
+            return true;
+
+        return parent::__set($param, $value);
     }
 
     public function get($param, $section = null)
     {
-        if (is_null($section)) {
+        if (is_null($section) || preg_match('/\./', $param)) {
             $split = explode('.', $param, 2);
             if (count($split) > 1) {
                 $section = $split[0];
@@ -81,17 +132,17 @@ class Options extends Component
         return false;
     }
 
-    private function getOptions()
+    private function getOptions($asArray = true)
     {
         if ($this->options === null) {
             if ($this->cache instanceof Cache) {
                 $options = $this->cache->get($this->cacheKey);
                 if ($options === false) {
-                    $options = $this->model->getAllOptions();
+                    $options = $this->model->getAllOptions($asArray);
                     $this->cache->set($this->cacheKey, $options);
                 }
             } else {
-                $options = $this->model->getAllOptions();
+                $options = $this->model->getAllOptions($asArray);
             }
             $this->options = $options;
         }

@@ -1,10 +1,10 @@
 {
   "name": "wdmg/yii2-options",
   "description": "Storage application options (settings) in the database for Yii2",
-  "keywords": ["yii2", "yii2-options", "application settings", "application options", "wdmg"],
+  "keywords": ["yii2", "yii2-options", "settings", "options", "wdmg"],
   "type": "yii2-extension",
   "license": "MIT",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "homepage": "https://github.com/wdmg/yii2-options",
   "support": {
     "source": "https://github.com/wdmg/yii2-options",
