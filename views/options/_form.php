@@ -12,13 +12,13 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->field($model, 'label')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'param')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'value')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'default')->textarea(['rows' => 6]) ?>
-
-    <?= $form->field($model, 'label')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'type')->textInput(['maxlength' => true]) ?>
 

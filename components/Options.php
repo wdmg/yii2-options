@@ -47,7 +47,7 @@ class Options extends Component
     public function autoload() {
 
         $params = [];
-        $data = $this->getOptions();
+        $data = $this->getOptions(true, false, true);
         foreach ($data as $section => $options) {
             foreach ($options as $param => $value) {
                 if (!empty($section))
@@ -115,7 +115,7 @@ class Options extends Component
         }
     }
 
-    public function set($param, $value, $section = null, $type = null, $label = null)
+    public function set($param, $value, $section = null, $type = null, $label = null, $autoload = false)
     {
         if (is_null($section) || preg_match('/\./', $param)) {
             $split = explode('.', $param, 2);
@@ -125,24 +125,24 @@ class Options extends Component
             }
         }
 
-        if ($this->model->setOption($section, $param, $value, $type, $label)) {
+        if ($this->model->setOption($section, $param, $value, $type, $label, $autoload)) {
             $this->clearCache();
             return true;
         }
         return false;
     }
 
-    private function getOptions($asArray = true)
+    private function getOptions($asArray = true, $useCache = true, $onlyAutoload = false)
     {
         if ($this->options === null) {
-            if ($this->cache instanceof Cache) {
+            if ($useCache && $this->cache instanceof Cache) {
                 $options = $this->cache->get($this->cacheKey);
                 if ($options === false) {
-                    $options = $this->model->getAllOptions($asArray);
+                    $options = $this->model->getAllOptions($asArray, $onlyAutoload);
                     $this->cache->set($this->cacheKey, $options);
                 }
             } else {
-                $options = $this->model->getAllOptions($asArray);
+                $options = $this->model->getAllOptions($asArray, $onlyAutoload);
             }
             $this->options = $options;
         }

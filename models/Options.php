@@ -36,6 +36,23 @@ class Options extends ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'created_at',
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
+                ],
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
@@ -44,6 +61,8 @@ class Options extends ActiveRecord
             [['section', 'param'], 'string', 'max' => 128],
             [['label'], 'string', 'max' => 255],
             [['type'], 'string', 'max' => 64],
+            [['autoload'], 'boolean'],
+            [['autoload'], 'default', 'value' => false],
             ['type', 'in', 'range' => ['boolean', 'integer', 'float', 'string', 'array', 'object', 'null']],
             [['param'], 'unique', 'targetAttribute' => ['section', 'param']],
             [['created_at', 'updated_at'], 'safe'],
@@ -63,35 +82,41 @@ class Options extends ActiveRecord
             'default' => Yii::t('app/modules/options', 'Default'),
             'label' => Yii::t('app/modules/options', 'Label'),
             'type' => Yii::t('app/modules/options', 'Type'),
+            'autoload' => Yii::t('app/modules/options', 'Autoload'),
             'created_at' => Yii::t('app/modules/options', 'Created at'),
             'updated_at' => Yii::t('app/modules/options', 'Updated at'),
         ];
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
-    public function behaviors()
+    public function beforeSave($insert)
     {
-        return [
-            'timestamp' => [
-                'class' => TimestampBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'created_at',
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
-                ],
-                'value' => new Expression('NOW()'),
-            ],
-        ];
+        if (preg_match('/\./', $this->param)) {
+            $split = explode('.', $this->param, 2);
+            if (count($split) > 1) {
+                if (is_null($this->section) || $this->section === $split[0]) {
+                    $this->section = $split[0];
+                    $this->param = $split[1];
+                }
+            }
+        }
+
+        return parent::beforeSave($insert);
     }
 
     /**
      * @inheritdoc
      */
-    public function getAllOptions($asArray = true)
+    public function getAllOptions($asArray = true, $onlyAutoload = false)
     {
+        $cond = [];
+        if($onlyAutoload)
+            $cond = ['autoload' => true];
+
         if($asArray)
-            $options = static::find()->asArray()->all();
+            $options = static::find()->where($cond)->asArray()->all();
         else
             $options = static::find()->all();
 
@@ -108,7 +133,7 @@ class Options extends ActiveRecord
     /**
      * @inheritdoc
      */
-    public function setOption($section, $param, $value, $type = null, $label = null)
+    public function setOption($section, $param, $value, $type = null, $label = null, $autoload = false)
     {
         $model = static::findOne(['section' => $section, 'param' => $param]);
 
@@ -121,6 +146,7 @@ class Options extends ActiveRecord
         $model->section = $section;
         $model->param = $param;
         $model->value = strval($value);
+        $model->autoload = $autoload;
 
         if ($type !== null)
             $model->type = $type;

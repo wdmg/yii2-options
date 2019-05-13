@@ -42,6 +42,23 @@ $this->params['breadcrumbs'][] = $this->title;
             'value:ntext',
             'default:ntext',
             'type',
+            [
+                'attribute' => 'autoload',
+                'format' => 'html',
+                'filter' => false,
+                'headerOptions' => [
+                    'class' => 'text-center'
+                ],
+                'contentOptions' => [
+                    'class' => 'text-center'
+                ],
+                'value' => function($data) {
+                    if ($data->autoload)
+                        return '<span class="glyphicon glyphicon-check text-success"></span>';
+                    else
+                        return '<span class="glyphicon glyphicon-check text-muted"></span>';
+                },
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

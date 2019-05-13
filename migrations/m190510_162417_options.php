@@ -21,11 +21,12 @@ class m190510_162417_options extends Migration
         $this->createTable('{{%options}}', [
             'id' => $this->primaryKey(),
             'section' => $this->string(128)->null(),
+            'label' => $this->string(255)->notNull(),
             'param' => $this->string(128)->notNull()->unique(),
             'value' => $this->text()->notNull(),
             'default' => $this->text()->notNull(),
-            'label' => $this->string(255)->notNull(),
             'type' => $this->string(64)->notNull(),
+            'autoload' => $this->boolean()->notNull(),
             'created_at' => $this->dateTime()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
             'updated_at' => $this->datetime()->defaultExpression('CURRENT_TIMESTAMP'),
         ], $tableOptions);

@@ -1,6 +1,10 @@
 Changelog
 =========
 
+## 1.2.1 (2019-05-13)
+ * Added autoload flag
+ * Refactoring
+ 
 ## 1.2.0 (2019-05-12)
  * Added autoload options from db to app
  
