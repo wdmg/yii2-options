@@ -20,6 +20,8 @@ use yii\behaviors\TimestampBehavior;
  * @property string $default
  * @property string $label
  * @property string $type
+ * @property string $autoload
+ * @property string $protected
  * @property string $created_at
  * @property string $updated_at
  */
@@ -61,8 +63,8 @@ class Options extends ActiveRecord
             [['section', 'param'], 'string', 'max' => 128],
             [['label'], 'string', 'max' => 255],
             [['type'], 'string', 'max' => 64],
-            [['autoload'], 'boolean'],
-            [['autoload'], 'default', 'value' => false],
+            [['autoload', 'protected'], 'boolean'],
+            [['autoload', 'protected'], 'default', 'value' => false],
             ['type', 'in', 'range' => ['boolean', 'integer', 'float', 'string', 'array', 'object', 'null']],
             [['param'], 'unique', 'targetAttribute' => ['section', 'param']],
             [['created_at', 'updated_at'], 'safe'],
@@ -83,6 +85,7 @@ class Options extends ActiveRecord
             'label' => Yii::t('app/modules/options', 'Label'),
             'type' => Yii::t('app/modules/options', 'Type'),
             'autoload' => Yii::t('app/modules/options', 'Autoload'),
+            'protected' => Yii::t('app/modules/options', 'Protected'),
             'created_at' => Yii::t('app/modules/options', 'Created at'),
             'updated_at' => Yii::t('app/modules/options', 'Updated at'),
         ];
@@ -93,22 +96,17 @@ class Options extends ActiveRecord
      */
     public function beforeSave($insert)
     {
-        if (preg_match('/\./', $this->param)) {
-            $split = explode('.', $this->param, 2);
-            if (count($split) > 1) {
-                if (is_null($this->section) || $this->section === $split[0]) {
-                    $this->section = $split[0];
-                    $this->param = $split[1];
-                }
-            }
+        $props = $this->getPropsByParam($this->param);
+        if(is_null($this->section) && !is_null($props['section'])) {
+            $this->section = $props['section'];
+            $this->param = $props['param'];
+        } else {
+            $this->section = null;
         }
 
         return parent::beforeSave($insert);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getAllOptions($asArray = true, $onlyAutoload = false)
     {
         $cond = [];
@@ -130,20 +128,23 @@ class Options extends ActiveRecord
         return $options;
     }
 
-    public function setOption($section, $param, $value, $type = null, $label = null, $autoload = false)
+    public function setOption($param, $value, $type = null, $label = null, $autoload = false, $protected = false)
     {
-        $model = static::findOne(['section' => $section, 'param' => $param]);
+        $props = $this->getPropsByParam($this->param);
+        if (!is_null($props['section']))
+            $model = static::findOne(['section' => $props['section'], 'param' => $param]);
+        else
+            $model = static::findOne(['param' => $param]);
 
         if ($model === null) {
             $model = new static();
             $model->default = strval($value);
         }
 
-
-        $model->section = $section;
         $model->param = $param;
         $model->value = strval($value);
         $model->autoload = $autoload;
+        $model->protected = $protected;
 
         if ($type !== null)
             $model->type = $type;
@@ -153,15 +154,49 @@ class Options extends ActiveRecord
         if ($label !== null)
             $model->label = $label;
         elseif (!isset($model->label))
-            $model->label = ucfirst(strtolower(implode(preg_split('/(?<=\\w)(?=[A-Z])/', $param, -1, PREG_SPLIT_NO_EMPTY), " ")));
+            $model->label = ucfirst(strtolower(implode(preg_split('/(?<=\\w)(?=[A-Z])/', str_replace('.', ' ', $model->param), -1, PREG_SPLIT_NO_EMPTY), " ")));
 
         return $model->save();
     }
 
-    /**
-     * @param $value
-     * @return string
-     */
+
+    public function getOptionsTypeList($addAllLabel = true) {
+
+        $items = [];
+        if ($addAllLabel)
+            $items = ['*' => Yii::t('app/modules/options', 'All types')];
+
+        return ArrayHelper::merge($items, [
+            'boolean' => Yii::t('app/modules/options', 'Boolean'),
+            'integer' => Yii::t('app/modules/options', 'Integer'),
+            'float' => Yii::t('app/modules/options', 'Integer with float'),
+            'string' => Yii::t('app/modules/options', 'String'),
+            'array' => Yii::t('app/modules/options', 'Array'),
+            'object' => Yii::t('app/modules/options', 'Object'),
+            'null' => Yii::t('app/modules/options', 'NULL'),
+        ]);
+    }
+
+    public function getAutoloadModeList($addAllLabel = true) {
+
+        $items = [];
+        if ($addAllLabel)
+            $items = ['*' => Yii::t('app/modules/options', 'All modes')];
+
+        return ArrayHelper::merge($items, [
+            '1' => Yii::t('app/modules/options', 'Autoloading'),
+            '0' => Yii::t('app/modules/options', 'Not loading'),
+        ]);
+    }
+
+    public function getFullParamName()
+    {
+        if (!is_null($this->section) && $this->param)
+            return $this->section.'.'.$this->param;
+
+        return $this->param;
+    }
+
     protected function getTypeByValue($value)
     {
 
@@ -192,25 +227,20 @@ class Options extends ActiveRecord
         return $type;
     }
 
-    public function optionsTypesList() {
+    protected function getPropsByParam($param) {
+        $section = null;
+        if (preg_match('/\./', $param)) {
+            $split = explode('.', $param, 2);
+            if (count($split) > 1) {
+                if (!empty($split[0]) && !empty($split[1])) {
+                    $section = $split[0];
+                    $param = $split[1];
+                }
+            }
+        }
         return [
-            '*' => Yii::t('app/modules/options', 'All types'),
-            'boolean' => Yii::t('app/modules/options', 'Boolean'),
-            'integer' => Yii::t('app/modules/options', 'Integer'),
-            'float' => Yii::t('app/modules/options', 'Integer with float'),
-            'string' => Yii::t('app/modules/options', 'String'),
-            'array' => Yii::t('app/modules/options', 'Array'),
-            'object' => Yii::t('app/modules/options', 'Object'),
-            'null' => Yii::t('app/modules/options', 'NULL'),
+            'section' => $section,
+            'param' => $param,
         ];
     }
-
-    public function autoloadTypesList() {
-        return [
-            '*' => Yii::t('app/modules/options', 'All modes'),
-            '1' => Yii::t('app/modules/options', 'Autoloading'),
-            '0' => Yii::t('app/modules/options', 'Not loading'),
-        ];
-    }
-
 }

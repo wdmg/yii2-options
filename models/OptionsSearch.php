@@ -18,7 +18,7 @@ class OptionsSearch extends Options
     {
         return [
             [['id'], 'integer'],
-            [['section', 'param', 'value', 'default', 'label', 'type', 'autoload', 'created_at', 'updated_at'], 'safe'],
+            [['section', 'param', 'value', 'default', 'label', 'type', 'autoload', 'protected', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 

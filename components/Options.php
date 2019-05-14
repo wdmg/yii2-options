@@ -46,6 +46,9 @@ class Options extends Component
 
     public function autoload() {
 
+        if (Yii::$app->db->schema->getTableSchema($this->model->tableName()) === null)
+            return;
+
         $params = [];
         $data = $this->getOptions(true, false, true);
         foreach ($data as $section => $options) {
@@ -115,17 +118,9 @@ class Options extends Component
         }
     }
 
-    public function set($param, $value, $section = null, $type = null, $label = null, $autoload = false)
+    public function set($param, $value, $type = null, $label = null, $autoload = false, $protected = false)
     {
-        if (is_null($section) || preg_match('/\./', $param)) {
-            $split = explode('.', $param, 2);
-            if (count($split) > 1) {
-                $section = $split[0];
-                $param = $split[1];
-            }
-        }
-
-        if ($this->model->setOption($section, $param, $value, $type, $label, $autoload)) {
+        if ($this->model->setOption($param, $value, $type, $label, $autoload, $protected)) {
             $this->clearCache();
             return true;
         }

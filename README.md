@@ -93,6 +93,7 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [in progress development]
+* v.1.2.3 - Autosplit section of params, complete UI
 * v.1.2.2 - List and sorting params
 * v.1.2.1 - Added autoload flag
 * v.1.2.0 - Added autoload options from db to app

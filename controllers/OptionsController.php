@@ -73,9 +73,10 @@ class OptionsController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'optionsTypes' => $searchModel->optionsTypesList(),
-            'autoloadTypes' => $searchModel->autoloadTypesList(),
-            'hasAutoload' => $this->hasAutoload
+            'optionsTypes' => $searchModel->getOptionsTypeList(),
+            'autoloadModes' => $searchModel->getAutoloadModeList(),
+            'hasAutoload' => $this->hasAutoload,
+            'module' => $this->module
         ]);
     }
 
@@ -87,8 +88,12 @@ class OptionsController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
+        $model = $this->findModel($id);
+        return $this->renderAjax('view', [
+            'model' => $model,
+            'optionsTypes' => $model->getOptionsTypeList(),
+            'autoloadModes' => $model->getAutoloadModeList(),
+            'hasAutoload' => $this->hasAutoload
         ]);
     }
 
@@ -100,13 +105,37 @@ class OptionsController extends Controller
     public function actionCreate()
     {
         $model = new Options();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->save()) {
+                Yii::$app->getSession()->setFlash(
+                    'success',
+                    Yii::t(
+                        'app/modules/options',
+                        'OK! Parameter `{param}` successfully added.',
+                        [
+                            'param' => $model->getFullParamName()
+                        ]
+                    )
+                );
+            } else {
+                Yii::$app->getSession()->setFlash(
+                    'danger',
+                    Yii::t(
+                        'app/modules/options',
+                        'An error occurred while adding a parameter `{param}`.',
+                        [
+                            'param' => $model->getFullParamName()
+                        ]
+                    )
+                );
+            }
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'optionsTypes' => $model->getOptionsTypeList(false),
+            'autoloadModes' => $model->getAutoloadModeList(false)
         ]);
     }
 
@@ -120,13 +149,51 @@ class OptionsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        if($model->protected) {
+            Yii::$app->getSession()->setFlash(
+                'danger',
+                Yii::t(
+                    'app/modules/options',
+                    'Error! You cannot edit a protected option `{param}`.',
+                    [
+                        'param' => $model->getFullParamName()
+                    ]
+                )
+            );
+            return $this->redirect(['index']);
+        }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) && !$model->protected) {
+            if($model->save()) {
+                Yii::$app->getSession()->setFlash(
+                    'success',
+                    Yii::t(
+                        'app/modules/options',
+                        'OK! Parameter `{param}` successfully edited.',
+                        [
+                            'param' => $model->getFullParamName()
+                        ]
+                    )
+                );
+            } else {
+                Yii::$app->getSession()->setFlash(
+                    'danger',
+                    Yii::t(
+                        'app/modules/options',
+                        'An error occurred while editing a parameter `{param}`.',
+                        [
+                            'param' => $model->getFullParamName()
+                        ]
+                    )
+                );
+            }
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'optionsTypes' => $model->getOptionsTypeList(false),
+            'autoloadModes' => $model->getAutoloadModeList(false),
             'hasAutoload' => $this->hasAutoload
         ]);
     }
@@ -142,7 +209,20 @@ class OptionsController extends Controller
     {
 
         $model = $this->findModel($id);
-        if($model->autoload && $this->hasAutoload) {
+
+        if($model->protected) {
+            Yii::$app->getSession()->setFlash(
+                'danger',
+                Yii::t(
+                    'app/modules/options',
+                    'Error! You cannot delete a protected from deletion option `{param}`.',
+                    [
+                        'param' => $model->param
+                    ]
+                )
+            );
+            return $this->redirect(['index']);
+        } elseif ($model->autoload && $this->hasAutoload) {
             Yii::$app->getSession()->setFlash(
                 'danger',
                 Yii::t(
@@ -153,7 +233,7 @@ class OptionsController extends Controller
                     ]
                 )
             );
-            return $this->redirect(['update', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
             if($model->delete()) {
                 Yii::$app->getSession()->setFlash(
@@ -179,7 +259,6 @@ class OptionsController extends Controller
                 );
             }
         }
-
         return $this->redirect(['index']);
     }
 

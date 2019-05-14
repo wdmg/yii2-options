@@ -27,6 +27,7 @@ class m190510_162417_options extends Migration
             'default' => $this->text()->notNull(),
             'type' => $this->string(64)->notNull(),
             'autoload' => $this->boolean()->notNull(),
+            'protected' => $this->boolean()->notNull(),
             'created_at' => $this->dateTime()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
             'updated_at' => $this->datetime()->defaultExpression('CURRENT_TIMESTAMP'),
         ], $tableOptions);

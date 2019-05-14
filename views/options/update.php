@@ -3,21 +3,22 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model wdmg\options\models\Settings */
+/* @var $model wdmg\users\models\Options */
 
 $this->title = Yii::t('app/modules/options', 'Update option: {name}', [
-    'name' => $model->id,
+    'name' => $model->param,
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/options', 'Options'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app/modules/options', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('app/modules/options', 'Edit');
 ?>
+<div class="page-header">
+    <h1><?= Html::encode($this->title) ?> <small class="text-muted pull-right">[v.<?= $this->context->module->version ?>]</small></h1>
+</div>
 <div class="options-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
+        'optionsTypes' => $optionsTypes,
+        'autoloadModes' => $autoloadModes
     ]) ?>
 
 </div>

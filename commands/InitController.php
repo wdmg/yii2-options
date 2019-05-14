@@ -44,7 +44,7 @@ class InitController extends Controller
         } else if($selected == "3") {
             $component = new Options;
             foreach (Yii::$app->params as $param => $value) {
-                $component->set($param, $value, null, null, null, true);
+                $component->set($param, $value, null, null, true, true);
             }
         } else {
             echo $this->ansiFormat("Error! Your selection has not been recognized.\n\n", Console::FG_RED);

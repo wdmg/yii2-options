@@ -1,9 +1,11 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use wdmg\widgets\SelectInput;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $searchModel wdmg\options\models\OptionsSearch */
@@ -11,20 +13,34 @@ use wdmg\widgets\SelectInput;
 
 $this->title = Yii::t('app/modules/options', 'Options');
 $this->params['breadcrumbs'][] = $this->title;
+
+$this->registerJs(<<< JS
+
+    /* To initialize BS3 tooltips set this below */
+    $(function () {
+        $("[data-toggle='tooltip']").tooltip(); 
+    });
+    
+    /* To initialize BS3 popovers set this below */
+    $(function () {
+        $("[data-toggle='popover']").popover(); 
+    });
+
+JS
+);
+
 ?>
+<div class="page-header">
+    <h1>
+        <?= Html::encode($this->title) ?> <small class="text-muted pull-right">[v.<?= $this->context->module->version ?>]</small>
+    </h1>
+</div>
 <div class="options-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a(Yii::t('app/modules/options', 'Create option'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'layout' => '{summary}<br\/>{items}<br\/>{summary}<br\/><div class="text-center">{pager}</div>',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
@@ -33,10 +49,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => true,
                 'format' => 'html',
                 'value' => function($data) {
-                    if ($data->section)
-                        return $data->label.'<br/><em class="text-muted">'.$data->section.'.'.$data->param.'</em>';
+
+                    if ($data->protected)
+                        $label = $data->label.' <span title="'.Yii::t('app/modules/options', 'Protected option').'" class="glyphicon glyphicon-lock text-danger"></span>';
                     else
-                        return $data->label.'<br/><em class="text-muted">'.$data->param.'</em>';
+                        $label = $data->label;
+
+                    return $label.'<br/><em class="text-muted">'.$data->getFullParamName().'</em>';
                 }
             ],
             [
@@ -73,7 +92,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'text-center'
                 ],
                 'value' => function($data) use ($optionsTypes) {
-
                     if ($optionsTypes && $data->type !== null)
                         return $optionsTypes[$data->type];
                     else
@@ -86,7 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => SelectInput::widget([
                     'model' => $searchModel,
                     'attribute' => 'autoload',
-                    'items' => $autoloadTypes,
+                    'items' => $autoloadModes,
                     'options' => [
                         'class' => 'form-control'
                     ]
@@ -97,10 +115,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => [
                     'class' => 'text-center'
                 ],
-                'value' => function($data) use ($autoloadTypes) {
+                'value' => function($data) use ($autoloadModes) {
 
-                    if ($autoloadTypes && $data->type !== null)
-                        $title = $autoloadTypes[$data->autoload];
+                    if ($autoloadModes && $data->autoload !== null)
+                        $title = $autoloadModes[$data->autoload];
                     else
                         $title = '';
 
@@ -113,12 +131,60 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'visibleButtons' => [
+                    'update' => function ($model, $key, $index) {
+                        return !($model->protected);
+                    },
                     'delete' => function ($model, $key, $index) use ($hasAutoload) {
-                        return !($model->autoload && $hasAutoload);
+                        return !(($model->autoload && $hasAutoload) || $model->protected);
                     }
-                ]
+                ],
+                'buttons'=> [
+                    'view' => function($url, $data, $key) use ($module) {
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['options/view', 'id' => $data['id']]), [
+                            'class' => 'option-details-link',
+                            'title' => Yii::t('yii', 'View'),
+                            'data-toggle' => 'modal',
+                            'data-target' => '#optionDetails',
+                            'data-id' => $key,
+                            'data-pjax' => '1'
+                        ]);
+                    }
+                ],
             ]
         ],
     ]); ?>
+    <div>
+        <?= Html::a(Yii::t('app/modules/options', 'Add new option'), ['create'], ['class' => 'btn btn-success pull-right']) ?>
+    </div>
     <?php Pjax::end(); ?>
 </div>
+
+<?php $this->registerJs(<<< JS
+$('body').delegate('.option-details-link', 'click', function(event) {
+    event.preventDefault();
+    $.get(
+        $(this).attr('href'),
+        function (data) {
+            var body = $(data).remove('.modal-footer').html();
+            var footer = $(data).find('.modal-footer').html();
+            $('#optionDetails .modal-body').html(body);
+            $('#optionDetails .modal-body').find('.modal-footer').remove();
+            $('#optionDetails .modal-footer').html(footer);
+            $('#optionDetails').modal();
+        }  
+    );
+});
+JS
+); ?>
+
+<?php Modal::begin([
+    'id' => 'optionDetails',
+    'header' => '<h4 class="modal-title">'.Yii::t('app/modules/options', 'Option details').'</h4>',
+    'footer' => '<a href="#" class="btn btn-default pull-left" data-dismiss="modal">'.Yii::t('app/modules/options', 'Close').'</a>',
+    'clientOptions' => [
+        'show' => false
+    ]
+]); ?>
+<?php Modal::end(); ?>
+
+<?php echo $this->render('../_debug'); ?>

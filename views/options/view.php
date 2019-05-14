@@ -13,29 +13,69 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="options-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a(Yii::t('app/modules/options', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app/modules/options', 'Delete'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app/modules/options', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
-            'param',
+            [
+                'attribute' => 'label',
+                'format' => 'html',
+                'value' => function($data) {
+                    if ($data->protected)
+                        return $data->label.' <span title="'.Yii::t('app/modules/options', 'Protected option').'" class="glyphicon glyphicon-lock text-danger"></span>';
+                    else
+                        return $data->label;
+                }
+            ],
+            [
+                'attribute' => 'param',
+                'format' => 'ntext',
+                'value' => function($data) {
+                    return $data->getFullParamName();
+                }
+            ],
             'value:ntext',
             'default:ntext',
-            'label',
-            'type',
+            [
+                'attribute' => 'type',
+                'format' => 'html',
+                'value' => function($data) use ($optionsTypes) {
+                    if ($optionsTypes && $data->type !== null)
+                        return $optionsTypes[$data->type];
+                    else
+                        return $data->type;
+                },
+            ],
+            [
+                'attribute' => 'autoload',
+                'format' => 'html',
+                'value' => function($data) use ($autoloadModes) {
+                    if ($autoloadModes && $data->autoload !== null)
+                        return $autoloadModes[$data->autoload];
+                    else
+                        return $data->autoload;
+                },
+            ]
         ],
     ]) ?>
-
+    <div class="modal-footer">
+        <?= Html::a(Yii::t('app/modules/options', 'Close'), "#", [
+                'class' => 'btn btn-default pull-left',
+                'data-dismiss' => 'modal'
+        ]) ?>
+        <?php
+            if (!($model->protected))
+                echo Html::a(Yii::t('app/modules/options', 'Edit'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']);
+        ?>
+        <?php
+            if (!(($model->autoload && $hasAutoload) || $model->protected))
+                echo Html::a(Yii::t('app/modules/options', 'Delete'), ['delete', 'id' => $model->id], [
+                    'class' => 'btn btn-danger pull-right',
+                    'data' => [
+                        'confirm' => Yii::t('app/modules/options', 'Are you sure you want to delete this item?'),
+                        'method' => 'post',
+                    ],
+                ]);
+        ?>
+    </div>
 </div>

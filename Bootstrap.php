@@ -27,8 +27,21 @@ class Bootstrap implements BootstrapInterface
         $app->getUrlManager()->addRules(
             [
                 $prefix . '<module:options>/' => '<module>/options/index',
-                $prefix . '<module:options>/<controller>/' => '<module>/<controller>',
-                $prefix . '<module:options>/<controller>/<action>' => '<module>/<controller>/<action>',
+                $prefix . '<module:options>/<controller:options>/' => '<module>/<controller>',
+                $prefix . '<module:options>/<controller:options>/<action:\w+>' => '<module>/<controller>/<action>',
+                [
+                    'pattern' => $prefix . '<module:options>/',
+                    'route' => '<module>/options/index',
+                    'suffix' => '',
+                ], [
+                    'pattern' => $prefix . '<module:options>/<controller:options>/',
+                    'route' => '<module>/<controller>',
+                    'suffix' => '',
+                ], [
+                    'pattern' => $prefix . '<module:options>/<controller:options>/<action:\w+>',
+                    'route' => '<module>/<controller>/<action>',
+                    'suffix' => '',
+                ],
             ],
             true
         );

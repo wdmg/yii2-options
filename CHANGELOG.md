@@ -1,6 +1,10 @@
 Changelog
 =========
 
+## 1.2.3 (2019-05-15)
+ * Autosplit section of params
+ * Complete UI for administartion
+ 
 ## 1.2.2 (2019-05-14)
  * List and sorting params
  
