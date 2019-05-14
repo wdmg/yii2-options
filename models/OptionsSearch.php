@@ -18,7 +18,7 @@ class OptionsSearch extends Options
     {
         return [
             [['id'], 'integer'],
-            [['section', 'param', 'value', 'default', 'label', 'type', 'created_at', 'updated_at'], 'safe'],
+            [['section', 'param', 'value', 'default', 'label', 'type', 'autoload', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -64,8 +64,13 @@ class OptionsSearch extends Options
         $query->andFilterWhere(['like', 'param', $this->param])
             ->andFilterWhere(['like', 'value', $this->value])
             ->andFilterWhere(['like', 'default', $this->default])
-            ->andFilterWhere(['like', 'label', $this->label])
-            ->andFilterWhere(['like', 'type', $this->type]);
+            ->andFilterWhere(['like', 'label', $this->label]);
+
+        if($this->autoload !== "*")
+            $query->andFilterWhere(['like', 'autoload', $this->autoload]);
+
+        if($this->type !== "*")
+            $query->andFilterWhere(['like', 'type', $this->type]);
 
         return $dataProvider;
     }

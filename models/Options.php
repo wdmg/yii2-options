@@ -130,9 +130,6 @@ class Options extends ActiveRecord
         return $options;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setOption($section, $param, $value, $type = null, $label = null, $autoload = false)
     {
         $model = static::findOne(['section' => $section, 'param' => $param]);
@@ -194,4 +191,26 @@ class Options extends ActiveRecord
 
         return $type;
     }
+
+    public function optionsTypesList() {
+        return [
+            '*' => Yii::t('app/modules/options', 'All types'),
+            'boolean' => Yii::t('app/modules/options', 'Boolean'),
+            'integer' => Yii::t('app/modules/options', 'Integer'),
+            'float' => Yii::t('app/modules/options', 'Integer with float'),
+            'string' => Yii::t('app/modules/options', 'String'),
+            'array' => Yii::t('app/modules/options', 'Array'),
+            'object' => Yii::t('app/modules/options', 'Object'),
+            'null' => Yii::t('app/modules/options', 'NULL'),
+        ];
+    }
+
+    public function autoloadTypesList() {
+        return [
+            '*' => Yii::t('app/modules/options', 'All modes'),
+            '1' => Yii::t('app/modules/options', 'Autoloading'),
+            '0' => Yii::t('app/modules/options', 'Not loading'),
+        ];
+    }
+
 }

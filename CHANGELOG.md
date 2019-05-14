@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.2.2 (2019-05-14)
+ * List and sorting params
+ 
 ## 1.2.1 (2019-05-13)
  * Added autoload flag
  * Refactoring

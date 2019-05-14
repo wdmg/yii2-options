@@ -3,8 +3,10 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use wdmg\widgets\SelectInput;
+
 /* @var $this yii\web\View */
-/* @var $searchModel wdmg\options\models\SettingsSearch */
+/* @var $searchModel wdmg\options\models\OptionsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app/modules/options', 'Options');
@@ -25,8 +27,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
             [
                 'attribute' => 'param',
                 'label' => Yii::t('app/modules/options', 'Label and param'),
@@ -39,28 +39,85 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $data->label.'<br/><em class="text-muted">'.$data->param.'</em>';
                 }
             ],
-            'value:ntext',
-            'default:ntext',
-            'type',
             [
-                'attribute' => 'autoload',
+                'attribute' => 'value',
                 'format' => 'html',
-                'filter' => false,
+                'value' => function($data) {
+                    if ($data->value)
+                        return '<pre contenteditable="true">'.$data->value.'</pre>';
+                }
+            ],
+            [
+                'attribute' => 'default',
+                'format' => 'html',
+                'value' => function($data) {
+                    if ($data->default)
+                        return '<pre class="text-muted">'.$data->default.'</pre>';
+                }
+            ],
+            [
+                'attribute' => 'type',
+                'format' => 'html',
+                'filter' => SelectInput::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'type',
+                    'items' => $optionsTypes,
+                    'options' => [
+                        'class' => 'form-control'
+                    ]
+                ]),
                 'headerOptions' => [
                     'class' => 'text-center'
                 ],
                 'contentOptions' => [
                     'class' => 'text-center'
                 ],
-                'value' => function($data) {
-                    if ($data->autoload)
-                        return '<span class="glyphicon glyphicon-check text-success"></span>';
+                'value' => function($data) use ($optionsTypes) {
+
+                    if ($optionsTypes && $data->type !== null)
+                        return $optionsTypes[$data->type];
                     else
-                        return '<span class="glyphicon glyphicon-check text-muted"></span>';
+                        return $data->type;
                 },
             ],
+            [
+                'attribute' => 'autoload',
+                'format' => 'html',
+                'filter' => SelectInput::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'autoload',
+                    'items' => $autoloadTypes,
+                    'options' => [
+                        'class' => 'form-control'
+                    ]
+                ]),
+                'headerOptions' => [
+                    'class' => 'text-center'
+                ],
+                'contentOptions' => [
+                    'class' => 'text-center'
+                ],
+                'value' => function($data) use ($autoloadTypes) {
 
-            ['class' => 'yii\grid\ActionColumn'],
+                    if ($autoloadTypes && $data->type !== null)
+                        $title = $autoloadTypes[$data->autoload];
+                    else
+                        $title = '';
+
+                    if ($data->autoload)
+                        return '<span title="'.$title.'" class="glyphicon glyphicon-check text-success"></span>';
+                    else
+                        return '<span title="'.$title.'" class="glyphicon glyphicon-check text-muted"></span>';
+                },
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'visibleButtons' => [
+                    'delete' => function ($model, $key, $index) use ($hasAutoload) {
+                        return !($model->autoload && $hasAutoload);
+                    }
+                ]
+            ]
         ],
     ]); ?>
     <?php Pjax::end(); ?>
