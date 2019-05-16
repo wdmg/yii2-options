@@ -41,7 +41,6 @@ class Options extends Component
         if (is_string($this->cache)) {
             $this->cache = Yii::$app->get($this->cache, false);
         }
-
     }
 
     public function autoload() {
@@ -66,7 +65,7 @@ class Options extends Component
      * {@inheritdoc}
      */
     public function __get($param) {
-        $value = $this->get($param);
+        $value = $this->get($param, null, true);
         if (isset($value))
             return $value;
 
@@ -83,37 +82,77 @@ class Options extends Component
         return parent::__set($param, $value);
     }
 
-    public function get($param, $section = null)
-    {
-        if (is_null($section) || preg_match('/\./', $param)) {
-            $split = explode('.', $param, 2);
-            if (count($split) > 1) {
-                $section = $split[0];
-                $param = $split[1];
-            }
-        }
 
+    public function get($param, $section = null, $hasObject = false)
+    {
         $options = $this->getOptions();
-        if (!empty($options[$section][$param][0]) && isset($options[$section][$param][0])) {
-            $value = $options[$section][$param][0];
-            if (isset($options[$section][$param][1])) {
-                $type = $options[$section][$param][1];
-                return $this->setType($value, $type);
+        if (!empty($param) && is_null($section) && $hasObject) {
+            if (isset($options[$param])) {
+                foreach ($options[$param] as $key => $props) {
+                    if (isset($props[0]) && !empty($key)) {
+                        $value = $props[0];
+                        if (isset($props[1])) {
+                            $type = $props[1];
+                            return (object)[$key => $this->setType($value, $type)];
+                        } else {
+                            return (object)[$key => $value];
+                        }
+                    } else {
+                        continue;
+                    }
+                }
+                return (object)[$param => null];
             } else {
-                return $value;
+                foreach ($options as $section => $option) {
+                    if (empty($section) && array_key_exists($param, $option)) {
+                        foreach ($option as $key => $props) {
+                            if ($key == $param) {
+                                if (isset($props[0])) {
+                                    $value = $props[0];
+                                    if (isset($props[1])) {
+                                        $type = $props[1];
+                                        return $this->setType($value, $type);
+                                    } else {
+                                        return $value;
+                                    }
+                                }
+                            } else {
+                                continue;
+                            }
+                        }
+                    }
+                }
+                return null;
             }
         } else {
-            if (!empty($options[$section][$param][2])) {
-                $default = $options[$section][$param][2];
+            if (is_null($section) || preg_match('/\./', $param)) {
+                $split = explode('.', $param, 2);
+                if (count($split) > 1) {
+                    $section = $split[0];
+                    $param = $split[1];
+                }
+            }
+            if (!empty($options[$section][$param][0]) && isset($options[$section][$param][0])) {
+                $value = $options[$section][$param][0];
                 if (isset($options[$section][$param][1])) {
                     $type = $options[$section][$param][1];
-                    return $this->setType($default, $type);
+                    return $this->setType($value, $type);
                 } else {
-                    return $default;
+                    return $value;
                 }
             } else {
-                throw new InvalidArgumentException('Undefined parameter `'.$param.'`');
-                return null;
+                if (!empty($options[$section][$param][2])) {
+                    $default = $options[$section][$param][2];
+                    if (isset($options[$section][$param][1])) {
+                        $type = $options[$section][$param][1];
+                        return $this->setType($default, $type);
+                    } else {
+                        return $default;
+                    }
+                } else {
+                    throw new InvalidArgumentException('Undefined parameter `'.$param.'`');
+                    return null;
+                }
             }
         }
     }

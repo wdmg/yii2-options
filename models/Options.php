@@ -82,7 +82,7 @@ class Options extends ActiveRecord
                     $this->addError('param', Yii::t('app/modules/options', 'Such a parameter `{param}` already exists in the `{section}` group. Select another parameter name.', $props));
             } else {
                 if (($model = static::findOne(['section' => null, 'param' => $props['param']])) !== null)
-                    $this->addError('param', Yii::t('app/modules/options', 'Param attribute must be unique7.'));
+                    $this->addError('param', Yii::t('app/modules/options', 'Param attribute must be unique.'));
             }
         }
     }
@@ -113,7 +113,7 @@ class Options extends ActiveRecord
     public function beforeSave($insert)
     {
         $props = $this->getPropsByParam($this->param);
-        if(is_null($this->section) && !is_null($props['section'])) {
+        if(!is_null($props['section'])) {
             $this->section = $props['section'];
             $this->param = $props['param'];
         } else {
@@ -146,11 +146,11 @@ class Options extends ActiveRecord
 
     public function setOption($param, $value, $type = null, $label = null, $autoload = false, $protected = false)
     {
-        $props = $this->getPropsByParam($this->param);
+        $props = $this->getPropsByParam($param);
         if (!is_null($props['section']))
-            $model = static::findOne(['section' => $props['section'], 'param' => $param]);
+            $model = static::findOne(['section' => $props['section'], 'param' => $props['param']]);
         else
-            $model = static::findOne(['param' => $param]);
+            $model = static::findOne(['param' => $props['param']]);
 
         if ($model === null) {
             $model = new static();

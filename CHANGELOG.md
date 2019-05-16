@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.2.5 (2019-05-17)
+ * Added get/set for options
+ 
 ## 1.2.4 (2019-05-16)
  * Param attributes validation
  
