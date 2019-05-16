@@ -7,6 +7,8 @@ use wdmg\options\models\Options;
 use wdmg\options\models\OptionsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 use yii\filters\VerbFilter;
 
 /**
@@ -105,6 +107,10 @@ class OptionsController extends Controller
     public function actionCreate()
     {
         $model = new Options();
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
         if ($model->load(Yii::$app->request->post())) {
             if($model->save()) {
                 Yii::$app->getSession()->setFlash(
@@ -149,6 +155,10 @@ class OptionsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
         if($model->protected) {
             Yii::$app->getSession()->setFlash(
                 'danger',

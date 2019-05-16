@@ -61,14 +61,14 @@ $config['bootstrap'][] = 'wdmg\options\Bootstrap';
         
         // Get app options (default)
         $options = Yii::$app->params;
-        $value = $options['adminEmail'];
-
+        $email = $options['adminEmail'];
+        
         // Get app options (from DB)
         $options = Yii::$app->options;
-        $value = $options->get('adminEmail');
+        $email = $options->get('adminEmail');
         // or
-        $value = $options->adminEmail;
-
+        $email = $options->adminEmail;
+        
         // Set app options
         $options = Yii::$app->options;
         $options->set('adminEmail', "admin@example.com");
@@ -93,6 +93,7 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [in progress development]
+* v.1.2.4 - Param attributes validation
 * v.1.2.3 - Autosplit section of params, complete UI
 * v.1.2.2 - List and sorting params
 * v.1.2.1 - Added autoload flag

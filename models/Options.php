@@ -60,15 +60,31 @@ class Options extends ActiveRecord
         return [
             [['param', 'value', 'type'], 'required'],
             [['value', 'default'], 'string'],
-            [['section', 'param'], 'string', 'max' => 128],
+            [['section', 'param'], 'string', 'min' => 3, 'max' => 128],
             [['label'], 'string', 'max' => 255],
             [['type'], 'string', 'max' => 64],
             [['autoload', 'protected'], 'boolean'],
             [['autoload', 'protected'], 'default', 'value' => false],
             ['type', 'in', 'range' => ['boolean', 'integer', 'float', 'string', 'array', 'object', 'null']],
-            [['param'], 'unique', 'targetAttribute' => ['section', 'param']],
+            ['param', 'checkUniqueParamName'],
+            ['param', 'unique', 'targetAttribute' => ['param'], 'message' => Yii::t('app/modules/options', 'Param attribute must be unique.')],
+            ['param', 'match', 'pattern' => '/^[A-Za-z0-9.]+$/', 'message' => Yii::t('app/modules/options','It allowed only Latin alphabet, numbers and the character «.»')],
             [['created_at', 'updated_at'], 'safe'],
         ];
+    }
+
+    public function checkUniqueParamName()
+    {
+        if (is_null($this->id)) {
+            $props = $this->getPropsByParam($this->param);
+            if(is_null($this->section) && !is_null($props['param']) && !is_null($props['section'])) {
+                if (!is_null($props['section']) && ($model = static::findOne(['section' => $props['section'], 'param' => $props['param']])) !== null)
+                    $this->addError('param', Yii::t('app/modules/options', 'Such a parameter `{param}` already exists in the `{section}` group. Select another parameter name.', $props));
+            } else {
+                if (($model = static::findOne(['section' => null, 'param' => $props['param']])) !== null)
+                    $this->addError('param', Yii::t('app/modules/options', 'Param attribute must be unique7.'));
+            }
+        }
     }
 
     /**

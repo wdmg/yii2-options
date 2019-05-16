@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.2.4 (2019-05-16)
+ * Param attributes validation
+ 
 ## 1.2.3 (2019-05-15)
  * Autosplit section of params
  * Complete UI for administartion

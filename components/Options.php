@@ -67,7 +67,7 @@ class Options extends Component
      */
     public function __get($param) {
         $value = $this->get($param);
-        if(isset($value))
+        if (isset($value))
             return $value;
 
         return parent::__get($param);
@@ -77,7 +77,7 @@ class Options extends Component
      * {@inheritdoc}
      */
     public function __set($param, $value) {
-        if($this->set($param, $value))
+        if ($this->set($param, $value))
             return true;
 
         return parent::__set($param, $value);

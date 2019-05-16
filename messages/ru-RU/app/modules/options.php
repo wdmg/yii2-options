@@ -38,7 +38,11 @@ return [
     'Option details' => "Детали опций",
     'Close' => "Закрыть",
 
+    'Param attribute must be unique.' => "Атрибут параметра должен быть уникальным.",
+    'It allowed only Latin alphabet, numbers and the character «.»' => "Допускается только латинский алфавит, цифры и символ «.»",
     'Use the symbol «.» as the delimiter of the group and parameter.' => "Используйте символ «.» в качестве разделителя группы и параметра.",
+    'Such a parameter `{param}` already exists in the `{section}` group. Select another parameter name.' => "Такой параметр `{param}` уже существует в группе `{section}`. Выберите другое имя параметра.",
+
 
     'All types' => "Все типы",
     'Boolean' => "Булево значение",

@@ -42,10 +42,16 @@ class InitController extends Controller
         } else if($selected == "2") {
             Yii::$app->runAction('migrate/down', ['migrationPath' => '@vendor/wdmg/yii2-options/migrations', 'interactive' => true]);
         } else if($selected == "3") {
+            $count_success = 0;
+            $count_fails = 0;
             $component = new Options;
             foreach (Yii::$app->params as $param => $value) {
-                $component->set($param, $value, null, null, true, true);
+                if($component->set($param, $value, null, null, true, true))
+                    $count_success++;
+                else
+                    $count_fails++;
             }
+            echo $this->ansiFormat("\n" . "Options successfully added/updated: {$count_success}, errors: {$count_fails}\n\n", Console::FG_YELLOW);
         } else {
             echo $this->ansiFormat("Error! Your selection has not been recognized.\n\n", Console::FG_RED);
             return ExitCode::UNSPECIFIED_ERROR;
