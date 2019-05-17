@@ -65,7 +65,7 @@ class Options extends ActiveRecord
             [['type'], 'string', 'max' => 64],
             [['autoload', 'protected'], 'boolean'],
             [['autoload', 'protected'], 'default', 'value' => false],
-            ['type', 'in', 'range' => ['boolean', 'integer', 'float', 'string', 'array', 'object', 'null']],
+            ['type', 'in', 'range' => ['boolean', 'integer', 'float', 'string', 'array', 'object', 'ip', 'url', 'email', 'domain', 'mac', 'regexp', 'NULL']],
             ['param', 'checkUniqueParamName'],
             ['param', 'unique', 'targetAttribute' => ['param'], 'message' => Yii::t('app/modules/options', 'Param attribute must be unique.')],
             ['param', 'match', 'pattern' => '/^[A-Za-z0-9.]+$/', 'message' => Yii::t('app/modules/options','It allowed only Latin alphabet, numbers and the character «.»')],
@@ -187,9 +187,15 @@ class Options extends ActiveRecord
             'integer' => Yii::t('app/modules/options', 'Integer'),
             'float' => Yii::t('app/modules/options', 'Integer with float'),
             'string' => Yii::t('app/modules/options', 'String'),
+            'ip' => Yii::t('app/modules/options', 'IP'),
+            'url' => Yii::t('app/modules/options', 'URL'),
+            'email' => Yii::t('app/modules/options', 'Email'),
+            'domain' => Yii::t('app/modules/options', 'Domain'),
+            'mac' => Yii::t('app/modules/options', 'MAC'),
+            'regexp' => Yii::t('app/modules/options', 'RegExp'),
             'array' => Yii::t('app/modules/options', 'Array'),
             'object' => Yii::t('app/modules/options', 'Object'),
-            'null' => Yii::t('app/modules/options', 'NULL'),
+            'NULL' => Yii::t('app/modules/options', 'NULL'),
         ]);
     }
 
@@ -224,6 +230,24 @@ class Options extends ActiveRecord
 
         if (filter_var($value, FILTER_VALIDATE_FLOAT))
             return 'float';
+
+        if (filter_var($value, FILTER_VALIDATE_IP))
+            return 'ip';
+
+        if (filter_var($value, FILTER_VALIDATE_URL))
+            return 'url';
+
+        if (filter_var($value, FILTER_VALIDATE_EMAIL))
+            return 'email';
+
+        if (filter_var($value, FILTER_VALIDATE_DOMAIN))
+            return 'domain';
+
+        if (filter_var($value, FILTER_VALIDATE_MAC))
+            return 'mac';
+
+        if (filter_var($value, FILTER_VALIDATE_REGEXP))
+            return 'regexp';
 
         $type = gettype($value);
         if ($type === 'object' && !empty($value)) {

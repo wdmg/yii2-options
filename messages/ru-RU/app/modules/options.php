@@ -51,6 +51,12 @@ return [
     'String' => "Строка",
     'Array' => "Массив",
     'Object' => "Объект",
+    'IP' => "IP-адрес",
+    'URL' => "URL-адрес",
+    'Email' => "Эл. почта",
+    'Domain' => "Домен",
+    'MAC' => "MAC-адрес",
+    'RegExp' => "RegExp",
     'NULL' => "NULL",
 
     'All modes' => "Всё режимы",
