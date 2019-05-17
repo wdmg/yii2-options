@@ -2,6 +2,7 @@
 
 return [
     'Options' => "Параметры",
+    'All options' => "Все параметры",
     'ID' => "ИД",
     'Section' => "Секция",
     'Param' => "Параметр",
@@ -46,7 +47,7 @@ return [
 
     'All types' => "Все типы",
     'Boolean' => "Булево значение",
-    'Integer' => "Число",
+    'Integer' => "Числовое значение",
     'Integer with float' => "Число с пл. точкой",
     'String' => "Строка",
     'Array' => "Массив",

@@ -11,7 +11,7 @@ use yii\bootstrap\Modal;
 /* @var $searchModel wdmg\options\models\OptionsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app/modules/options', 'Options');
+$this->title = Yii::t('app/modules/options', 'All options');
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJs(<<< JS

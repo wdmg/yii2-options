@@ -6,10 +6,8 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model wdmg\options\models\Settings */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/options', 'Options'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+
 ?>
 <div class="options-view">
 
@@ -55,7 +53,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     else
                         return $data->autoload;
                 },
-            ]
+            ],
+            'created_at:datetime',
+            'updated_at:datetime'
         ],
     ]) ?>
     <div class="modal-footer">

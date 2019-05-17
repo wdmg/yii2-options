@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model wdmg\users\models\Options */
 
 $this->title = Yii::t('app/modules/options', 'Create option');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/options', 'Options'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/options', 'All options'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="page-header">

@@ -8,7 +8,7 @@ use yii\helpers\Html;
 $this->title = Yii::t('app/modules/options', 'Update option: {name}', [
     'name' => $model->param,
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/options', 'Options'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/options', 'All options'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = Yii::t('app/modules/options', 'Edit');
 ?>
 <div class="page-header">
