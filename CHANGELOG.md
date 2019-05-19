@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.2.6 (2019-05-19)
+ * Added autodetect option type if create new
+ 
 ## 1.2.5 (2019-05-17)
  * Added some options types
  * Added get/set for options

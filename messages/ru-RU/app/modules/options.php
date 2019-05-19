@@ -44,8 +44,11 @@ return [
     'Use the symbol «.» as the delimiter of the group and parameter.' => "Используйте символ «.» в качестве разделителя группы и параметра.",
     'Such a parameter `{param}` already exists in the `{section}` group. Select another parameter name.' => "Такой параметр `{param}` уже существует в группе `{section}`. Выберите другое имя параметра.",
 
+    'This type `{type}` not supported.' => "Данный тип `{type}` не поддерживается.",
+    'The parameter type does not match the value.' => "Тип параметра не соответствует значению.",
 
     'All types' => "Все типы",
+    'Not selected' => "Не выбрано",
     'Boolean' => "Булево значение",
     'Integer' => "Числовое значение",
     'Integer with float' => "Число с пл. точкой",
@@ -58,7 +61,6 @@ return [
     'Domain' => "Домен",
     'MAC' => "MAC-адрес",
     'RegExp' => "RegExp",
-    'NULL' => "NULL",
 
     'All modes' => "Всё режимы",
     'Autoloading' => "Автозагружаемый",

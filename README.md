@@ -97,4 +97,5 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [in progress development]
+* v.1.2.6 - Added autodetect option type if create new
 * v.1.2.5 - Added get/set for options

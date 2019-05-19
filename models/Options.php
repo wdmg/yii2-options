@@ -27,6 +27,10 @@ use yii\behaviors\TimestampBehavior;
  */
 class Options extends ActiveRecord
 {
+
+    public $typeRange = ['boolean', 'integer', 'float', 'string', 'array', 'object', 'email', 'ip', 'url', 'domain', 'mac', 'regexp'];
+
+
     /**
      * {@inheritdoc}
      */
@@ -48,7 +52,7 @@ class Options extends ActiveRecord
                     ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
                 ],
                 'value' => new Expression('NOW()'),
-            ],
+            ]
         ];
     }
 
@@ -64,13 +68,30 @@ class Options extends ActiveRecord
             [['label'], 'string', 'max' => 255],
             [['type'], 'string', 'max' => 64],
             [['autoload', 'protected'], 'boolean'],
-            [['autoload', 'protected'], 'default', 'value' => false],
-            ['type', 'in', 'range' => ['boolean', 'integer', 'float', 'string', 'array', 'object', 'ip', 'url', 'email', 'domain', 'mac', 'regexp', 'NULL']],
+            //[['autoload', 'protected'], 'default', 'value' => 0],
+            [['value', 'default', 'type'], 'checkTypeOfValue'],
+            ['type', 'in', 'range' => $this->typeRange],
             ['param', 'checkUniqueParamName'],
             ['param', 'unique', 'targetAttribute' => ['param'], 'message' => Yii::t('app/modules/options', 'Param attribute must be unique.')],
             ['param', 'match', 'pattern' => '/^[A-Za-z0-9.]+$/', 'message' => Yii::t('app/modules/options','It allowed only Latin alphabet, numbers and the character «.»')],
             [['created_at', 'updated_at'], 'safe'],
         ];
+    }
+
+    public function checkTypeOfValue()
+    {
+        if (!empty($this->value)) {
+            $type = self::getTypeByValue($this->value);
+            if (!in_array($type, $this->typeRange)) {
+                $this->addError('value', Yii::t('app/modules/options', 'This type `{type}` not supported.', ['type' => $type]));
+            }
+            if ($this->id && !empty($this->type)) {
+                $type = self::getTypeByValue($this->value);
+                if ($type !== $this->type) {
+                    $this->addError('type', Yii::t('app/modules/options', 'The parameter type does not match the value.'));
+                }
+            }
+        }
     }
 
     public function checkUniqueParamName()
@@ -175,12 +196,13 @@ class Options extends ActiveRecord
         return $model->save();
     }
 
-
     public function getOptionsTypeList($addAllLabel = true) {
 
         $items = [];
         if ($addAllLabel)
             $items = ['*' => Yii::t('app/modules/options', 'All types')];
+        else
+            $items = ['null' => Yii::t('app/modules/options', 'Not selected')];
 
         return ArrayHelper::merge($items, [
             'boolean' => Yii::t('app/modules/options', 'Boolean'),
@@ -194,8 +216,7 @@ class Options extends ActiveRecord
             'mac' => Yii::t('app/modules/options', 'MAC'),
             'regexp' => Yii::t('app/modules/options', 'RegExp'),
             'array' => Yii::t('app/modules/options', 'Array'),
-            'object' => Yii::t('app/modules/options', 'Object'),
-            'NULL' => Yii::t('app/modules/options', 'NULL'),
+            'object' => Yii::t('app/modules/options', 'Object')
         ]);
     }
 
@@ -219,8 +240,9 @@ class Options extends ActiveRecord
         return $this->param;
     }
 
-    protected function getTypeByValue($value)
+    public static function getTypeByValue($value)
     {
+        $value = trim($value);
 
         if (filter_var($value, FILTER_VALIDATE_BOOLEAN))
             return 'boolean';
@@ -234,19 +256,18 @@ class Options extends ActiveRecord
         if (filter_var($value, FILTER_VALIDATE_IP))
             return 'ip';
 
-        if (filter_var($value, FILTER_VALIDATE_URL))
-            return 'url';
-
         if (filter_var($value, FILTER_VALIDATE_EMAIL))
             return 'email';
-
-        if (filter_var($value, FILTER_VALIDATE_DOMAIN))
-            return 'domain';
 
         if (filter_var($value, FILTER_VALIDATE_MAC))
             return 'mac';
 
-        if (filter_var($value, FILTER_VALIDATE_REGEXP))
+        if(preg_match("/^[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$/", $value))
+            return 'domain';
+        elseif (filter_var($value, FILTER_VALIDATE_URL) || preg_match("/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/", $value))
+            return 'url';
+
+        if(preg_match("/^\/[\s\S]+\/[a-zA-Z]{0,6}+$/", $value))
             return 'regexp';
 
         $type = gettype($value);
@@ -264,10 +285,13 @@ class Options extends ActiveRecord
 
         }
 
-        return $type;
+        if($type)
+            return $type;
+        else
+            return "string";
     }
 
-    protected function getPropsByParam($param) {
+    public function getPropsByParam($param) {
         $section = null;
         if (preg_match('/\./', $param)) {
             $split = explode('.', $param, 2);

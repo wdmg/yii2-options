@@ -153,6 +153,7 @@ JS
             ]
         ],
     ]); ?>
+    <hr/>
     <div>
         <?= Html::a(Yii::t('app/modules/options', 'Add new option'), ['create'], ['class' => 'btn btn-success pull-right']) ?>
     </div>

@@ -5,6 +5,7 @@ namespace wdmg\options\controllers;
 use Yii;
 use wdmg\options\models\Options;
 use wdmg\options\models\OptionsSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -107,35 +108,43 @@ class OptionsController extends Controller
     public function actionCreate()
     {
         $model = new Options();
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($model);
-        }
-        if ($model->load(Yii::$app->request->post())) {
-            if($model->save()) {
-                Yii::$app->getSession()->setFlash(
-                    'success',
-                    Yii::t(
-                        'app/modules/options',
-                        'OK! Parameter `{param}` successfully added.',
-                        [
-                            'param' => $model->getFullParamName()
-                        ]
-                    )
-                );
-            } else {
-                Yii::$app->getSession()->setFlash(
-                    'danger',
-                    Yii::t(
-                        'app/modules/options',
-                        'An error occurred while adding a parameter `{param}`.',
-                        [
-                            'param' => $model->getFullParamName()
-                        ]
-                    )
-                );
+        $model->autoload = 0;
+        $model->protected = 0;
+
+        if (Yii::$app->request->isAjax) {
+            if ($model->load(Yii::$app->request->post())) {
+                if ($model->value)
+                    return $this->asJson(['success' => true, 'type' => $model->getTypeByValue($model->value)]);
+                else
+                    return $this->asJson(['success' => false]);
             }
-            return $this->redirect(['index']);
+        } else {
+            if ($model->load(Yii::$app->request->post())) {
+                if($model->save()) {
+                    Yii::$app->getSession()->setFlash(
+                        'success',
+                        Yii::t(
+                            'app/modules/options',
+                            'OK! Parameter `{param}` successfully added.',
+                            [
+                                'param' => $model->getFullParamName()
+                            ]
+                        )
+                    );
+                    return $this->redirect(['index']);
+                } else {
+                    Yii::$app->getSession()->setFlash(
+                        'danger',
+                        Yii::t(
+                            'app/modules/options',
+                            'An error occurred while adding a parameter `{param}`.',
+                            [
+                                'param' => $model->getFullParamName()
+                            ]
+                        )
+                    );
+                }
+            }
         }
 
         return $this->render('create', [

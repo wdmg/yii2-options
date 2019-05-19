@@ -4,7 +4,7 @@
   "keywords": ["yii2", "yii2-options", "settings", "options", "wdmg"],
   "type": "yii2-extension",
   "license": "MIT",
-  "version": "1.2.4",
+  "version": "1.2.6",
   "homepage": "https://github.com/wdmg/yii2-options",
   "support": {
     "source": "https://github.com/wdmg/yii2-options",
@@ -21,7 +21,8 @@
     }
   ],
   "require": {
-    "yiisoft/yii2": "^2.0.13"
+    "yiisoft/yii2": "^2.0.13",
+    "wdmg/yii2-selectinput": "^1.0.1"
   },
   "minimum-stability": "dev",
   "autoload": {
