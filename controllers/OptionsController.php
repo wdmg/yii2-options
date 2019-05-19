@@ -5,10 +5,13 @@ namespace wdmg\options\controllers;
 use Yii;
 use wdmg\options\models\Options;
 use wdmg\options\models\OptionsSearch;
+use wdmg\options\models\OptionsImport;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
+use yii\web\UploadedFile;
 use yii\widgets\ActiveForm;
 use yii\filters\VerbFilter;
 
@@ -31,7 +34,13 @@ class OptionsController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'index' => ['get'],
+                    'view' => ['get'],
+                    'delete' => ['post'],
+                    'create' => ['get', 'post'],
+                    'update' => ['get', 'post'],
+                    'export' => ['get'],
+                    'import' => ['post'],
                 ],
             ],
         ];
@@ -71,10 +80,12 @@ class OptionsController extends Controller
     public function actionIndex()
     {
         $searchModel = new OptionsSearch();
+        $importModel = new OptionsImport();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
+            'importModel' => $importModel,
             'dataProvider' => $dataProvider,
             'optionsTypes' => $searchModel->getOptionsTypeList(),
             'autoloadModes' => $searchModel->getAutoloadModeList(),
@@ -276,6 +287,45 @@ class OptionsController extends Controller
                         ]
                     )
                 );
+            }
+        }
+        return $this->redirect(['index']);
+    }
+
+    public function actionExport() {
+        $filename = 'options_'.date('dmY_His').'.json';
+        $options = Options::find()->select('section, label, param, value, type, autoload, protected')->asArray()->all();
+        Yii::$app->response->sendContentAsFile(Json::encode($options), $filename, [
+            'mimeType' => 'application/json',
+            'inline' => false
+        ])->send();
+    }
+
+    public function actionImport() {
+        $model = new OptionsImport();
+        if (Yii::$app->request->isPost) {
+            if($model->validate()) {
+                $import = UploadedFile::getInstance($model, 'import');
+                $options = file_get_contents($import->tempName);
+                if ($data = Json::decode($options)) {
+                    if ($model->import($data)) {
+                        Yii::$app->getSession()->setFlash(
+                            'success',
+                            Yii::t(
+                                'app/modules/options',
+                                'OK! Parameters successfully imported/updated.'
+                            )
+                        );
+                    }
+                } else {
+                    Yii::$app->getSession()->setFlash(
+                        'danger',
+                        Yii::t(
+                            'app/modules/options',
+                            'An error occurred while importing/updating parameters.'
+                        )
+                    );
+                }
             }
         }
         return $this->redirect(['index']);

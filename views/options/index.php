@@ -155,6 +155,18 @@ JS
     ]); ?>
     <hr/>
     <div>
+        <div class="btn-group">
+            <?= Html::a(Yii::t('app/modules/options', 'Import options'), ['import'], [
+                'class' => 'btn btn-warning',
+                'data-toggle' => 'modal',
+                'data-target' => '#optionsImport',
+                'data-pjax' => '1'
+            ]) ?>
+            <?= Html::a(Yii::t('app/modules/options', 'Export options'), ['export'], [
+                'class' => 'btn btn-info',
+                'data-pjax' => '0'
+            ]) ?>
+        </div>
         <?= Html::a(Yii::t('app/modules/options', 'Add new option'), ['create'], ['class' => 'btn btn-success pull-right']) ?>
     </div>
     <?php Pjax::end(); ?>
@@ -177,6 +189,13 @@ $('body').delegate('.option-details-link', 'click', function(event) {
 });
 JS
 ); ?>
+
+<?php Modal::begin([
+    'id' => 'optionsImport',
+    'header' => '<h4 class="modal-title">'.Yii::t('app/modules/options', 'Options import').'</h4>',
+]); ?>
+<?php echo $this->render('_import', ['model' => $importModel]); ?>
+<?php Modal::end(); ?>
 
 <?php Modal::begin([
     'id' => 'optionDetails',

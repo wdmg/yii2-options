@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.3.0 (2019-05-20)
+ * Added import/export interface
+ 
 ## 1.2.6 (2019-05-19)
  * Added autodetect option type if create new
  

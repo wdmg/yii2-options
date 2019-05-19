@@ -62,6 +62,17 @@ return [
     'MAC' => "MAC-адрес",
     'RegExp' => "RegExp",
 
+    'Import file' => "Файл импорта",
+    'Import' => "Импорт",
+    'Import options' => "Импорт параметров",
+    'Options import' => "Импортирование параметров",
+
+    'Export' => "Экспорт",
+    'Export options' => "Экспорт параметров",
+
+    'OK! Parameters successfully imported/updated.' => "OK! Параметры успешно импортированы/обновлены.",
+    'An error occurred while importing/updating parameters.' => "Произошла ошибка при импорте/обновлении параметров.",
+
     'All modes' => "Всё режимы",
     'Autoloading' => "Автозагружаемый",
     'Not loading' => "Не загружаемый",

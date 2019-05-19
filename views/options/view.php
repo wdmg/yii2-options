@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model wdmg\options\models\Settings */
+/* @var $model wdmg\options\models\Options */
 
 \yii\web\YiiAsset::register($this);
 

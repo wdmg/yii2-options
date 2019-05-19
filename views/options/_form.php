@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use wdmg\widgets\SelectInput;
 
 /* @var $this yii\web\View */
-/* @var $model wdmg\options\models\Settings */
+/* @var $model wdmg\options\models\Options */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <div class="options-form">

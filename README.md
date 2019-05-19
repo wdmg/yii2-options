@@ -10,6 +10,7 @@ Storage application options (settings) in the database for Yii2
 # Requirements
 * PHP 5.6 or higher
 * Yii2 v.2.0.13 and newest
+* [Yii2 SelectInput](https://github.com/wdmg/yii2-selectinput) widget
 
 # Installation
 To install the module, run the following command in the console:
@@ -23,6 +24,7 @@ After configure db connection, run the following command in the console:
 And select the operation you want to perform:
   1) Apply all module migrations
   2) Revert all module migrations
+  3) Scan and add all application options
 
 # Migrations
 In any case, you can execute the migration and create the initial data, run the following command in the console:
@@ -97,5 +99,5 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [in progress development]
+* v.1.3.0 - Added import/export interface
 * v.1.2.6 - Added autodetect option type if create new
-* v.1.2.5 - Added get/set for options

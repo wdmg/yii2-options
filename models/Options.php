@@ -28,6 +28,7 @@ use yii\behaviors\TimestampBehavior;
 class Options extends ActiveRecord
 {
 
+    public $import;
     public $typeRange = ['boolean', 'integer', 'float', 'string', 'array', 'object', 'email', 'ip', 'url', 'domain', 'mac', 'regexp'];
 
 
@@ -125,6 +126,7 @@ class Options extends ActiveRecord
             'protected' => Yii::t('app/modules/options', 'Protected'),
             'created_at' => Yii::t('app/modules/options', 'Created at'),
             'updated_at' => Yii::t('app/modules/options', 'Updated at'),
+            'import' => Yii::t('app/modules/options', 'Import file'),
         ];
     }
 
@@ -165,9 +167,9 @@ class Options extends ActiveRecord
         return $options;
     }
 
-    public function setOption($param, $value, $type = null, $label = null, $autoload = false, $protected = false)
+    public static function setOption($param, $value, $type = null, $label = null, $autoload = false, $protected = false)
     {
-        $props = $this->getPropsByParam($param);
+        $props = self::getPropsByParam($param);
         if (!is_null($props['section']))
             $model = static::findOne(['section' => $props['section'], 'param' => $props['param']]);
         else
@@ -186,7 +188,7 @@ class Options extends ActiveRecord
         if ($type !== null)
             $model->type = $type;
         elseif (!isset($model->type))
-            $model->type = $this->getTypeByValue($value);
+            $model->type = self::getTypeByValue($value);
 
         if ($label !== null)
             $model->label = $label;
@@ -244,7 +246,7 @@ class Options extends ActiveRecord
     {
         $value = trim($value);
 
-        if (filter_var($value, FILTER_VALIDATE_BOOLEAN))
+        if (filter_var($value, FILTER_VALIDATE_BOOLEAN) || $value === "true" || $value === "false")
             return 'boolean';
 
         if (filter_var($value, FILTER_VALIDATE_INT))
@@ -291,7 +293,7 @@ class Options extends ActiveRecord
             return "string";
     }
 
-    public function getPropsByParam($param) {
+    public static function getPropsByParam($param) {
         $section = null;
         if (preg_match('/\./', $param)) {
             $split = explode('.', $param, 2);
