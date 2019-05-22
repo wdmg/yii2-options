@@ -46,6 +46,13 @@ class Bootstrap implements BootstrapInterface
             true
         );
 
+        // Configure options component
+        $app->setComponents([
+            'options' => [
+                'class' => 'wdmg\options\components\Options'
+            ]
+        ]);
+
         // Autoload options from db to app params
         if ($module->autoloadOptions) {
             $component = new Options;

@@ -34,13 +34,6 @@ In any case, you can execute the migration and create the initial data, run the 
 # Configure
 To add a module to the project, add the following data in your configuration file:
 
-    'components' => [
-        ...
-        'options' => [
-            'class' => 'wdmg\options\components\Options'
-        ],
-        ...
-    ],
     'modules' => [
         ...
         'options' => [
@@ -99,5 +92,5 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [in progress development]
+* v.1.3.1 - Configure options component from Bootstrap
 * v.1.3.0 - Added import/export interface
-* v.1.2.6 - Added autodetect option type if create new

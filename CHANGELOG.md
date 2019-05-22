@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.3.1 (2019-05-22)
+ * Configure options component from Bootstrap
+ 
 ## 1.3.0 (2019-05-20)
  * Added import/export interface
  
