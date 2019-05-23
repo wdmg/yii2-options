@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.3.2 (2019-05-23)
+ * SetType bugfix
+ 
 ## 1.3.1 (2019-05-22)
  * Configure options component from Bootstrap
  

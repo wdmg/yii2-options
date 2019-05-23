@@ -185,6 +185,9 @@ class Options extends Component
 
     private function setType($var, $type = null)
     {
+        if (in_array($type, ['email', 'ip', 'url', 'domain', 'mac', 'regexp'], true))
+            $type = 'string';
+
         settype($var, $type);
         return $var;
     }

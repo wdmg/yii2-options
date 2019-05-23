@@ -92,5 +92,6 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [in progress development]
+* v.1.3.2 - SetType bugfix
 * v.1.3.1 - Configure options component from Bootstrap
 * v.1.3.0 - Added import/export interface
