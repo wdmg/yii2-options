@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.3.3 (2019-05-26)
+ * Updated dependencies
+ 
 ## 1.3.2 (2019-05-23)
  * SetType bugfix
  
