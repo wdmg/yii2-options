@@ -21,27 +21,37 @@ class Bootstrap implements BootstrapInterface
         $module = Yii::$app->getModule('options');
 
         // Get URL path prefix if exist
-        $prefix = (isset($module->routePrefix) ? $module->routePrefix . '/' : '');
+        if (isset($module->routePrefix)) {
+            $app->getUrlManager()->enableStrictParsing = true;
+            $prefix = $module->routePrefix . '/';
+        } else {
+            $prefix = '';
+        }
 
         // Add module URL rules
         $app->getUrlManager()->addRules(
             [
-                $prefix . '<module:options>/' => '<module>/options/index',
-                $prefix . '<module:options>/<controller:options>/' => '<module>/<controller>',
-                $prefix . '<module:options>/<controller:options>/<action:\w+>' => '<module>/<controller>/<action>',
+                $prefix . '<module:options>' => '<module>/options/index',
+                $prefix . '<module:options>/<controller:\w+>' => '<module>/<controller>',
+                $prefix . '<module:options>/<controller:\w+>/<action:[0-9a-zA-Z_\-]+>' => '<module>/<controller>/<action>',
+                $prefix . '<module:options>/<controller:\w+>/<action:[0-9a-zA-Z_\-]+>/<id:\d+>' => '<module>/<controller>/<action>',
                 [
                     'pattern' => $prefix . '<module:options>/',
                     'route' => '<module>/options/index',
-                    'suffix' => '',
+                    'suffix' => ''
                 ], [
-                    'pattern' => $prefix . '<module:options>/<controller:options>/',
+                    'pattern' => $prefix . '<module:options>/<controller:\w+>/',
                     'route' => '<module>/<controller>',
-                    'suffix' => '',
+                    'suffix' => ''
                 ], [
-                    'pattern' => $prefix . '<module:options>/<controller:options>/<action:\w+>',
+                    'pattern' => $prefix . '<module:options>/<controller:\w+>/<action:[0-9a-zA-Z_\-]+>/',
                     'route' => '<module>/<controller>/<action>',
-                    'suffix' => '',
-                ],
+                    'suffix' => ''
+                ], [
+                    'pattern' => $prefix . '<module:options>/<controller:\w+>/<action:[0-9a-zA-Z_\-]+>/<id:\d+>/',
+                    'route' => '<module>/<controller>/<action>',
+                    'suffix' => ''
+                ]
             ],
             true
         );

@@ -2,6 +2,8 @@
 
 return [
     'Options' => "Параметры",
+    'Storage application options in the database' => "Хранение параметров приложения в базе данных",
+
     'All options' => "Все параметры",
     'ID' => "ИД",
     'Section' => "Секция",
