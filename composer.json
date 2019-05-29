@@ -24,7 +24,7 @@
     "yiisoft/yii2": "^2.0.13",
     "wdmg/yii2-selectinput": "^1.0.3"
   },
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "autoload": {
     "psr-4": {
       "wdmg\\options\\": ""
