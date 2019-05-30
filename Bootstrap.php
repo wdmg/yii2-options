@@ -64,9 +64,11 @@ class Bootstrap implements BootstrapInterface
         ]);
 
         // Autoload options from db to app params
-        if ($module->autoloadOptions) {
-            $component = new Options;
-            $component->autoload();
+        if (isset($module)) {
+            if ($module->autoloadOptions) {
+                $component = new Options;
+                $component->autoload();
+            }
         }
     }
 }

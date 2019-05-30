@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.3.5 (2019-05-30)
+ * Autoload options fix if module not configured
+ 
 ## 1.3.4 (2019-05-28)
  * Added module name and description, translations. Routing fix.
  

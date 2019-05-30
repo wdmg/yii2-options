@@ -92,5 +92,6 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [in progress development]
+* v.1.3.5 - Autoload options fix if module not configured
 * v.1.3.4 - Added module name and description, translations. Routing fix.
 * v.1.3.3 - Updated dependencies
