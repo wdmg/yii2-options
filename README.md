@@ -9,7 +9,7 @@ Storage application options (settings) in the database for Yii2
 
 # Requirements
 * PHP 5.6 or higher
-* Yii2 v.2.0.13 and newest
+* Yii2 v.2.0.19 and newest
 * [Yii2 SelectInput](https://github.com/wdmg/yii2-selectinput) widget
 
 # Installation
@@ -92,6 +92,5 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [in progress development]
+* v.1.3.6 - Update Yii2 version
 * v.1.3.5 - Autoload options fix if module not configured
-* v.1.3.4 - Added module name and description, translations. Routing fix.
-* v.1.3.3 - Updated dependencies

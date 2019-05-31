@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.3.6 (2019-05-31)
+ * Update Yii2 version
+ 
 ## 1.3.5 (2019-05-30)
  * Autoload options fix if module not configured
  

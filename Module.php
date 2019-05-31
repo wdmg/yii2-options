@@ -6,7 +6,7 @@ namespace wdmg\options;
  * Yii2 Options
  *
  * @category        Module
- * @version         1.3.5
+ * @version         1.3.6
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
  * @link            https://github.com/wdmg/yii2-messages
  * @copyright       Copyright (c) 2019 W.D.M.Group, Ukraine
@@ -54,7 +54,7 @@ class Module extends \yii\base\Module
     /**
      * @var string the module version
      */
-    private $version = "1.3.5";
+    private $version = "1.3.6";
 
     /**
      * @var integer, priority of initialization
