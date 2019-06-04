@@ -7,9 +7,9 @@ namespace wdmg\options\components;
  * Yii2 Options
  *
  * @category        Component
- * @version         1.3.7
+ * @version         1.3.8
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
- * @link            https://github.com/wdmg/yii2-messages
+ * @link            https://github.com/wdmg/yii2-options
  * @copyright       Copyright (c) 2019 W.D.M.Group, Ukraine
  * @license         https://opensource.org/licenses/MIT Massachusetts Institute of Technology (MIT) License
  *

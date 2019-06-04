@@ -9,7 +9,7 @@ Storage application options (settings) in the database for Yii2
 
 # Requirements
 * PHP 5.6 or higher
-* Yii2 v.2.0.19 and newest
+* Yii2 v.2.0.20 and newest
 * [Yii2 SelectInput](https://github.com/wdmg/yii2-selectinput) widget
 
 # Installation
@@ -43,12 +43,6 @@ To add a module to the project, add the following data in your configuration fil
         ],
         ...
     ],
-
-If you have connected the module not via a composer add Bootstrap section:
-
-`
-$config['bootstrap'][] = 'wdmg\options\Bootstrap';
-`
 
 # Usage
 
@@ -92,5 +86,5 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [in progress development]
+* v.1.3.8 - Module transferred to base module interface. Update Yii2 version.
 * v.1.3.7 - Bugfix, routing and refactoring
-* v.1.3.6 - Update Yii2 version
