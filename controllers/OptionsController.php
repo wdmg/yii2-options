@@ -14,6 +14,7 @@ use yii\web\Response;
 use yii\web\UploadedFile;
 use yii\widgets\ActiveForm;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * OptionsController implements the CRUD actions for Settings model.
@@ -41,6 +42,15 @@ class OptionsController extends Controller
                     'update' => ['get', 'post'],
                     'export' => ['get'],
                     'import' => ['post'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'roles' => ['admin'],
+                        'allow' => true
+                    ],
                 ],
             ],
         ];
