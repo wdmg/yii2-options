@@ -10,6 +10,7 @@ Storage application options (settings) in the database for Yii2
 # Requirements
 * PHP 5.6 or higher
 * Yii2 v.2.0.20 and newest
+* [Yii2 Base](https://github.com/wdmg/yii2-base) module (required)
 * [Yii2 SelectInput](https://github.com/wdmg/yii2-selectinput) widget
 
 # Installation
