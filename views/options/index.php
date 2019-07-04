@@ -152,6 +152,11 @@ JS
                 ],
             ]
         ],
+        'rowOptions' => function ($model, $index, $widget, $grid) {
+            if($model->value !== $model->default) {
+                return ['class' => 'changed warning'];
+            }
+        },
     ]); ?>
     <hr/>
     <div>
