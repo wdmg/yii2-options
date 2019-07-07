@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.3.11 (2019-07-07)
+ * Bugfix url route for import
+ 
 ## 1.3.10 (2019-06-09)
  * Added choice param for non interactive mode
  

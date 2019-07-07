@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -12,7 +13,7 @@ use yii\widgets\ActiveForm;
 <div class="options-import">
     <?php $form = ActiveForm::begin([
         'id' => "importOptionsForm",
-        'action' => 'options/import',
+        'action' => Url::to(['options/import']),
         'method' => 'post',
         'options' => [
             'enctype' => 'multipart/form-data'
