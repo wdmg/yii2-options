@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.3.12 (2019-07-16)
+ * Added extra options to composer.json and navbar menu icon
+
 ## 1.3.11 (2019-07-07)
  * Bugfix url route for import
  

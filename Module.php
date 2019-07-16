@@ -6,7 +6,7 @@ namespace wdmg\options;
  * Yii2 Options
  *
  * @category        Module
- * @version         1.3.11
+ * @version         1.3.12
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
  * @link            https://github.com/wdmg/yii2-options
  * @copyright       Copyright (c) 2019 W.D.M.Group, Ukraine
@@ -45,7 +45,7 @@ class Module extends BaseModule
     /**
      * @var string the module version
      */
-    private $version = "1.3.11";
+    private $version = "1.3.12";
 
     /**
      * @var integer, priority of initialization
@@ -70,6 +70,20 @@ class Module extends BaseModule
         // Set priority of current module
         $this->setPriority($this->priority);
 
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dashboardNavItems($createLink = false)
+    {
+        $items = [
+            'label' => $this->name,
+            'url' => [$this->routePrefix . '/'. $this->id],
+            'icon' => 'fa-gear',
+            'active' => in_array(\Yii::$app->controller->module->id, [$this->id])
+        ];
+        return $items;
     }
 
     /**

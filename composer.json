@@ -4,7 +4,7 @@
   "keywords": ["yii2", "yii2-options", "settings", "options", "wdmg"],
   "type": "yii2-extension",
   "license": "MIT",
-  "version": "1.3.11",
+  "version": "1.3.12",
   "homepage": "https://github.com/wdmg/yii2-options",
   "support": {
     "source": "https://github.com/wdmg/yii2-options",
@@ -29,6 +29,12 @@
   "autoload": {
     "psr-4": {
       "wdmg\\options\\": ""
+    }
+  },
+  "extra": {
+    "options": {
+      "routePrefix": "admin",
+      "autoloadOptions": true
     }
   }
 }
