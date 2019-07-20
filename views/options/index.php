@@ -60,18 +60,28 @@ JS
             ],
             [
                 'attribute' => 'value',
-                'format' => 'html',
-                'value' => function($data) {
-                    if ($data->value)
-                        return '<pre contenteditable="true">'.$data->value.'</pre>';
+                'format' => 'raw',
+                'value' => function ($data) {
+                    if ($data->type == 'array') {
+                        return 'array()';
+                    } else if ($data->type == 'object') {
+                        return 'object()';
+                    } else {
+                        return '<pre contenteditable="true">' . $data->value . '</pre>';
+                    }
                 }
             ],
             [
                 'attribute' => 'default',
-                'format' => 'html',
-                'value' => function($data) {
-                    if ($data->default)
-                        return '<pre class="text-muted">'.$data->default.'</pre>';
+                'format' => 'raw',
+                'value' => function ($data) {
+                    if ($data->type == 'array') {
+                        return 'array()';
+                    } else if ($data->type == 'object') {
+                        return 'object()';
+                    } else {
+                        return $data->default;
+                    }
                 }
             ],
             [

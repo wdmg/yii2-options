@@ -7,7 +7,7 @@ namespace wdmg\options\components;
  * Yii2 Options
  *
  * @category        Component
- * @version         1.3.12
+ * @version         1.3.13
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
  * @link            https://github.com/wdmg/yii2-options
  * @copyright       Copyright (c) 2019 W.D.M.Group, Ukraine
@@ -150,7 +150,6 @@ class Options extends Component
                         return $default;
                     }
                 } else {
-                    throw new InvalidArgumentException('Undefined parameter `'.$param.'`');
                     return null;
                 }
             }

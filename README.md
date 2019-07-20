@@ -87,6 +87,6 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [ready to use]
+* v.1.3.13 - Changes to scan and add modules options from console
 * v.1.3.12 - Added extra options to composer.json and navbar menu icon
 * v.1.3.11 - Bugfix url route for import
-* v.1.3.10 - Added choice param for non interactive mode

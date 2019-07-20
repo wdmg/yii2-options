@@ -59,12 +59,69 @@ class InitController extends Controller
             $count_success = 0;
             $count_fails = 0;
             $component = new Options;
-            foreach (Yii::$app->params as $param => $value) {
-                if($component->set($param, $value, null, null, true, true))
+
+            // Scan and add app params
+            foreach (Yii::$app->params as $option => $value) {
+
+                if ($component->set($option, $value, null, null, true, true))
                     $count_success++;
                 else
                     $count_fails++;
+
             }
+
+            // Scan and add modules options
+            if(class_exists('\wdmg\admin\models\Modules') && isset(Yii::$app->modules['admin'])) {
+                $model = new \wdmg\admin\models\Modules();
+                $modules = $model::getModules(true);
+                if (is_array($modules)) {
+                    foreach ($modules as $module) {
+
+                        $options = (is_array($module['options'])) ? $module['options'] : unserialize($module['options']);
+                        unset($options['name']);
+                        unset($options['description']);
+                        unset($options['controllerNamespace']);
+                        unset($options['defaultRoute']);
+                        unset($options['routePrefix']);
+                        unset($options['vendor']);
+                        unset($options['controllerMap']);
+
+                        foreach ($options as $option => $value) {
+                            if (is_array($value)) {
+
+                                if ($component->set($module['module'] . '.' . $option, serialize($value), 'array', null, true, false))
+                                    $count_success++;
+                                else
+                                    $count_fails++;
+
+                            } else if (is_object($value)) {
+
+                                if ($component->set($module['module'] . '.' . $option, serialize($value), 'object', null, true, false))
+                                    $count_success++;
+                                else
+                                    $count_fails++;
+
+                            } else if (is_bool($value)) {
+
+                                if ($component->set($module['module'] . '.' . $option, $value, 'boolean', null, true, false))
+                                    $count_success++;
+                                else
+                                    $count_fails++;
+
+                            } else {
+
+                                if ($component->set($module['module'] . '.' . $option, $value, null, null, true, false))
+                                    $count_success++;
+                                else
+                                    $count_fails++;
+
+                            }
+                        }
+                    }
+                }
+            }
+
+
             echo $this->ansiFormat("\n" . "Options successfully added/updated: {$count_success}, errors: {$count_fails}\n\n", Console::FG_YELLOW);
         } else {
             echo $this->ansiFormat("Error! Your selection has not been recognized.\n\n", Console::FG_RED);

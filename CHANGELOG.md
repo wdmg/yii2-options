@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.3.13 (2019-07-20)
+ * Changes to scan and add modules options from console
+
 ## 1.3.12 (2019-07-16)
  * Added extra options to composer.json and navbar menu icon
 
