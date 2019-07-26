@@ -191,15 +191,15 @@ JS
 $('body').delegate('.option-details-link', 'click', function(event) {
     event.preventDefault();
     $.get(
-        $(this).attr('href'),
+        $(this).attr('href'), 
         function (data) {
-            var body = $(data).remove('.modal-footer').html();
-            var footer = $(data).find('.modal-footer').html();
-            $('#optionDetails .modal-body').html(body);
-            $('#optionDetails .modal-body').find('.modal-footer').remove();
-            $('#optionDetails .modal-footer').html(footer);
+            $('#optionDetails .modal-body').html($(data).remove('.modal-footer'));
+            if ($(data).find('.modal-footer').length > 0) {
+                $('#optionDetails').find('.modal-footer').remove();
+                $('#optionDetails .modal-content').append($(data).find('.modal-footer'));
+            }
             $('#optionDetails').modal();
-        }  
+        }
     );
 });
 JS
