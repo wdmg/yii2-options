@@ -51,11 +51,14 @@ class Options extends Component
         $params = [];
         $data = $this->getOptions(true, false, true);
         foreach ($data as $section => $options) {
-            foreach ($options as $param => $value) {
+            foreach ($options as $param => $option) {
+
+                $value = $option[0];
                 if (!empty($section))
-                    $params[$section.'.'.$param] = $value[0];
+                    $params[$section.'.'.$param] = $value;
                 else
-                    $params[$param] = $value[0];
+                    $params[$param] = $value;
+
             }
         }
         Yii::$app->params = ArrayHelper::merge(Yii::$app->params, $params);
@@ -187,7 +190,11 @@ class Options extends Component
         if (in_array($type, ['email', 'ip', 'url', 'domain', 'mac', 'regexp'], true))
             $type = 'string';
 
-        settype($var, $type);
+        if ($type == 'array')
+            $var = unserialize($var);
+        else
+            settype($var, $type);
+
         return $var;
     }
 
