@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.4.0 (2019-08-06)
+ * Bugfix settype for options
+ 
 ## 1.3.13 (2019-07-20)
  * Changes to scan and add modules options from console
 
