@@ -7,7 +7,7 @@ namespace wdmg\options\components;
  * Yii2 Options
  *
  * @category        Component
- * @version         1.4.0
+ * @version         1.5.0
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
  * @link            https://github.com/wdmg/yii2-options
  * @copyright       Copyright (c) 2019 W.D.M.Group, Ukraine
@@ -61,6 +61,7 @@ class Options extends Component
 
             }
         }
+        Yii::info('Autoloaded options from DB to app params', __METHOD__);
         Yii::$app->params = ArrayHelper::merge(Yii::$app->params, $params);
     }
 
@@ -96,7 +97,7 @@ class Options extends Component
                         $value = $props[0];
                         if (isset($props[1])) {
                             $type = $props[1];
-                            return (object)[$key => $this->setType($value, $type)];
+                            return (object)[$key => $this->setUpType($value, $type)];
                         } else {
                             return (object)[$key => $value];
                         }
@@ -114,7 +115,7 @@ class Options extends Component
                                     $value = $props[0];
                                     if (isset($props[1])) {
                                         $type = $props[1];
-                                        return $this->setType($value, $type);
+                                        return $this->setUpType($value, $type);
                                     } else {
                                         return $value;
                                     }
@@ -135,20 +136,23 @@ class Options extends Component
                     $param = $split[1];
                 }
             }
-            if (!empty($options[$section][$param][0]) && isset($options[$section][$param][0])) {
+
+            //if (!empty($options[$section][$param][0]) && isset($options[$section][$param][0])) {
+            if (isset($options[$section][$param][0])) {
                 $value = $options[$section][$param][0];
                 if (isset($options[$section][$param][1])) {
                     $type = $options[$section][$param][1];
-                    return $this->setType($value, $type);
+                    return $this->setUpType($value, $type);
                 } else {
                     return $value;
                 }
             } else {
-                if (!empty($options[$section][$param][2])) {
+                //if (!empty($options[$section][$param][2])) {
+                if (isset($options[$section][$param][2])) {
                     $default = $options[$section][$param][2];
                     if (isset($options[$section][$param][1])) {
                         $type = $options[$section][$param][1];
-                        return $this->setType($default, $type);
+                        return $this->setUpType($default, $type);
                     } else {
                         return $default;
                     }
@@ -185,27 +189,38 @@ class Options extends Component
         return $this->options;
     }
 
-    private function setType($var, $type = null)
+    private function setUpType($value, $type = null)
     {
         if (in_array($type, ['email', 'ip', 'url', 'domain', 'mac', 'regexp'], true))
             $type = 'string';
 
-        if ($type == 'array')
-            $var = unserialize($var);
-        else
-            settype($var, $type);
+        if ($type == 'boolean' || $type == 'bool') {
+            if (intval($value) === 1 || $value === "true") {
+                return true;
+            } else {
+                return false;
+            }
+        }
 
-        return $var;
+        if ($type == 'array')
+            $value = unserialize($value);
+        else
+            settype($value, $type);
+
+        return $value;
     }
 
     public function clearCache()
     {
+
         $this->options = null;
         if ($this->cache instanceof Cache) {
+            Yii::info('Cache of options has been cleared', __METHOD__);
             return $this->cache->delete($this->cacheKey);
         }
         return true;
     }
+
 }
 
 ?>

@@ -149,21 +149,22 @@ class Options extends ActiveRecord
     public function getAllOptions($asArray = true, $onlyAutoload = false)
     {
         $cond = [];
-        if($onlyAutoload)
+        if ($onlyAutoload)
             $cond = ['autoload' => true];
 
-        if($asArray)
+        if ($asArray)
             $options = static::find()->where($cond)->asArray()->all();
         else
             $options = static::find()->all();
 
-        if($asArray) {
-            return array_merge_recursive(
+        if ($asArray) {
+            $options = array_merge_recursive(
                 ArrayHelper::map($options, 'param', 'value', 'section'),
                 ArrayHelper::map($options, 'param', 'type', 'section'),
                 ArrayHelper::map($options, 'param', 'default', 'section')
             );
         }
+
         return $options;
     }
 
