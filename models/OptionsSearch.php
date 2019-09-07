@@ -61,7 +61,30 @@ class OptionsSearch extends Options
             'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'param', $this->param])
+
+        // Search by mask, like `mailer.*`
+        $section = null;
+        $param = $this->param;
+        if (preg_match('/\./', $param)) {
+            $split = explode('.', $param, 2);
+            if (count($split) > 1) {
+                if (!empty($split[0]) && !empty($split[1])) {
+                    if ($split[1] == '*') {
+                        $section = $split[0];
+                        $param = null;
+                    } else {
+                        $section = $split[0];
+                        $param = $split[1];
+                    }
+                } elseif (!empty($split[0]) && empty($split[1])) {
+                    $section = $split[0];
+                    $param = null;
+                }
+            }
+        }
+
+        $query->andFilterWhere(['like', 'section', $section])
+            ->andFilterWhere(['like', 'param', $param])
             ->andFilterWhere(['like', 'value', $this->value])
             ->andFilterWhere(['like', 'default', $this->default])
             ->andFilterWhere(['like', 'label', $this->label]);

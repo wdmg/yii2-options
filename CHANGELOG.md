@@ -2,6 +2,7 @@ Changelog
 =========
 
 ## 1.5.0 (2019-09-07)
+ * Added search by mask
  * Bugfix autoload options
  
 ## 1.4.0 (2019-08-06)
