@@ -88,7 +88,7 @@ class Options extends ActiveRecord
             }
             if ($this->id && !empty($this->type)) {
                 $type = self::getTypeByValue($this->value);
-                if ($type !== $this->type) {
+                if ($type !== $this->type && ($this->type !== 'array' && $this->type !== 'object')) {
                     $this->addError('type', Yii::t('app/modules/options', 'The parameter type does not match the value.'));
                 }
             }
@@ -176,27 +176,41 @@ class Options extends ActiveRecord
         else
             $model = static::findOne(['param' => $props['param']]);
 
-        if ($model === null) {
-            $model = new static();
-            $model->default = strval($value);
-        }
-
-        $model->param = $param;
-        $model->value = strval($value);
-        $model->autoload = $autoload;
-        $model->protected = $protected;
-
         if ($type !== null)
             $model->type = $type;
         elseif (!isset($model->type))
             $model->type = self::getTypeByValue($value);
+
+        if ($model === null) {
+            $model = new static();
+
+            if ($model->type == "array" || $model->type == "object")
+                $model->default = serialize($value);
+            else
+                $model->default = trim($value);
+
+        }
+
+        $model->param = $param;
+
+        if ($model->type == "array" || $model->type == "object")
+            $model->value = serialize($value);
+        else
+            $model->value = trim($value);
+
+        $model->autoload = $autoload;
+        $model->protected = $protected;
 
         if ($label !== null)
             $model->label = $label;
         elseif (!isset($model->label))
             $model->label = ucfirst(strtolower(implode(preg_split('/(?<=\\w)(?=[A-Z])/', str_replace('.', ' ', $model->param), -1, PREG_SPLIT_NO_EMPTY), " ")));
 
-        return $model->save();
+        if ($model->save())
+            return true;
+        else
+            return $model->errors;
+
     }
 
     public function getOptionsTypeList($addAllLabel = true) {
@@ -245,7 +259,9 @@ class Options extends ActiveRecord
 
     public static function getTypeByValue($value)
     {
-        $value = trim($value);
+        $type = gettype($value);
+        if (is_string($value) || $type == "string")
+            $value = trim($value);
 
         if (filter_var($value, FILTER_VALIDATE_BOOLEAN) || $value === "true" || $value === "false")
             return 'boolean';
@@ -265,27 +281,28 @@ class Options extends ActiveRecord
         if (filter_var($value, FILTER_VALIDATE_MAC))
             return 'mac';
 
-        if(preg_match("/^[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$/", $value))
-            return 'domain';
-        elseif (filter_var($value, FILTER_VALIDATE_URL) || preg_match("/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/", $value))
-            return 'url';
+        if (is_string($value) || $type == "string") {
+            if(preg_match("/^[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$/", $value))
+                return 'domain';
+            elseif (filter_var($value, FILTER_VALIDATE_URL) || preg_match("/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/", $value))
+                return 'url';
 
-        if(preg_match("/^\/[\s\S]+\/[a-zA-Z]{0,6}+$/", $value))
-            return 'regexp';
+            if(preg_match("/^\/[\s\S]+\/[a-zA-Z]{0,6}+$/", $value))
+                return 'regexp';
+        } else {
+            if (($type === 'object' || $type === 'array') && !empty($value)) {
 
-        $type = gettype($value);
-        if ($type === 'object' && !empty($value)) {
+                $error = false;
+                try {
+                    Json::decode($value);
+                } catch (InvalidArgumentException $e) {
+                    $error = true;
+                }
 
-            $error = false;
-            try {
-                Json::decode($value);
-            } catch (InvalidArgumentException $e) {
-                $error = true;
+                if (!$error)
+                    $type = 'object';
+
             }
-
-            if (!$error)
-                $type = 'object';
-
         }
 
         if($type)

@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.5.1 (2019-10-10)
+ * Bugfix for save options and settype for get options
+
 ## 1.5.0 (2019-09-07)
  * Added search by mask
  * Bugfix autoload options

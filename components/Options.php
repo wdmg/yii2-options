@@ -7,7 +7,7 @@ namespace wdmg\options\components;
  * Yii2 Options
  *
  * @category        Component
- * @version         1.5.0
+ * @version         1.5.1
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
  * @link            https://github.com/wdmg/yii2-options
  * @copyright       Copyright (c) 2019 W.D.M.Group, Ukraine
@@ -52,8 +52,14 @@ class Options extends Component
         $data = $this->getOptions(true, false, true);
         foreach ($data as $section => $options) {
             foreach ($options as $param => $option) {
-
+                $type = $option[1];
                 $value = $option[0];
+                if ($type == "object" || $type == "array")
+                    $value = unserialize($value);
+
+                if (in_array($type, ["boolean", "bool", "integer", "int", "float", "double", "string", "object", "array", "null"]))
+                    settype($value, $type);
+
                 if (!empty($section))
                     $params[$section.'.'.$param] = $value;
                 else
@@ -165,11 +171,8 @@ class Options extends Component
 
     public function set($param, $value, $type = null, $label = null, $autoload = false, $protected = false)
     {
-        if ($this->model->setOption($param, $value, $type, $label, $autoload, $protected)) {
-            $this->clearCache();
-            return true;
-        }
-        return false;
+        $this->clearCache();
+        return $this->model->setOption($param, $value, $type, $label, $autoload, $protected);
     }
 
     private function getOptions($asArray = true, $useCache = true, $onlyAutoload = false)
