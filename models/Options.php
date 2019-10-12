@@ -176,20 +176,18 @@ class Options extends ActiveRecord
         else
             $model = static::findOne(['param' => $props['param']]);
 
+        if ($model === null)
+            $model = new static();
+
         if ($type !== null)
             $model->type = $type;
         elseif (!isset($model->type))
             $model->type = self::getTypeByValue($value);
 
-        if ($model === null) {
-            $model = new static();
-
-            if ($model->type == "array" || $model->type == "object")
-                $model->default = serialize($value);
-            else
-                $model->default = trim($value);
-
-        }
+        if ($model->type == "array" || $model->type == "object")
+            $model->default = serialize($value);
+        else
+            $model->default = trim($value);
 
         $model->param = $param;
 

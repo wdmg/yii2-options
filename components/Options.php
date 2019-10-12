@@ -54,8 +54,10 @@ class Options extends Component
             foreach ($options as $param => $option) {
                 $type = $option[1];
                 $value = $option[0];
-                if ($type == "object" || $type == "array")
+
+                if ($type == "object" || $type == "array") {
                     $value = unserialize($value);
+                }
 
                 if (in_array($type, ["boolean", "bool", "integer", "int", "float", "double", "string", "object", "array", "null"]))
                     settype($value, $type);

@@ -89,14 +89,14 @@ class InitController extends Controller
                         foreach ($options as $option => $value) {
                             if (is_array($value)) {
 
-                                if ($component->set($module['module'] . '.' . $option, serialize($value), 'array', null, true, false))
+                                if ($component->set($module['module'] . '.' . $option, $value, 'array', null, true, false))
                                     $count_success++;
                                 else
                                     $count_fails++;
 
                             } else if (is_object($value)) {
 
-                                if ($component->set($module['module'] . '.' . $option, serialize($value), 'object', null, true, false))
+                                if ($component->set($module['module'] . '.' . $option, $value, 'object', null, true, false))
                                     $count_success++;
                                 else
                                     $count_fails++;

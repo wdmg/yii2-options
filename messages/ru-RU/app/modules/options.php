@@ -75,6 +75,9 @@ return [
     'OK! Parameters successfully imported/updated.' => "OK! Параметры успешно импортированы/обновлены.",
     'An error occurred while importing/updating parameters.' => "Произошла ошибка при импорте/обновлении параметров.",
 
+    'OK! Properties successfully updated.' => "OK! Настройки успешно обновлены.",
+    'An error occurred while updating a properties.' => "Произошла ошибка при обновлении настроек.",
+
     'All modes' => "Всё режимы",
     'Autoloading' => "Автозагружаемый",
     'Not loading' => "Не загружаемый",
