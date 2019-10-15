@@ -50,7 +50,7 @@ class Module extends BaseModule
     /**
      * @var integer, priority of initialization
      */
-    private $priority = 1;
+    private $priority = 2;
 
     /**
      * @var boolean, autoload options to Yii::$app->params
