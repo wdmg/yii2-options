@@ -87,7 +87,6 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [ready to use]
+* v.1.5.2 - Added try/catch for unserialize, loading app name from params
 * v.1.5.1 - Bugfix for save options and settype for get options
 * v.1.5.0 - Bugfix autoload options
-* v.1.4.0 - Bugfix settype for options
-* v.1.3.13 - Changes to scan and add modules options from console

@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.5.2 (2019-10-28)
+ * Added try/catch for unserialize, loading app name from params
+ 
 ## 1.5.1 (2019-10-10)
  * Bugfix for save options and settype for get options
 

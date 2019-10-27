@@ -7,7 +7,7 @@ namespace wdmg\options\components;
  * Yii2 Options
  *
  * @category        Component
- * @version         1.5.1
+ * @version         1.5.2
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
  * @link            https://github.com/wdmg/yii2-options
  * @copyright       Copyright (c) 2019 W.D.M.Group, Ukraine
@@ -18,6 +18,7 @@ namespace wdmg\options\components;
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidArgumentException;
+use yii\base\ErrorException;
 use yii\helpers\ArrayHelper;
 
 class Options extends Component
@@ -54,9 +55,15 @@ class Options extends Component
             foreach ($options as $param => $option) {
                 $type = $option[1];
                 $value = $option[0];
+                $default = $option[2];
 
                 if ($type == "object" || $type == "array") {
-                    $value = unserialize($value);
+                    try {
+                        $value = unserialize($value);
+                    } catch (ErrorException $e) {
+                        $value = unserialize($default);
+                        Yii::warning('Unserialize error: '.$e);
+                    }
                 }
 
                 if (in_array($type, ["boolean", "bool", "integer", "int", "float", "double", "string", "object", "array", "null"]))
@@ -207,10 +214,16 @@ class Options extends Component
             }
         }
 
-        if ($type == 'array')
-            $value = unserialize($value);
-        else
+        if ($type == 'array') {
+            try {
+                $value = unserialize($value);
+            } catch (ErrorException $e) {
+                Yii::warning('Unserialize error: '.$e);
+                return false;
+            }
+        } else {
             settype($value, $type);
+        }
 
         return $value;
     }
