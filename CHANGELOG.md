@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.5.3 (2019-11-04)
+ * Added edit interface for array/object options
+ 
 ## 1.5.2 (2019-10-28)
  * Added try/catch for unserialize, loading app name from params
  

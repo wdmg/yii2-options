@@ -81,6 +81,8 @@ return [
     'All modes' => "Всё режимы",
     'Autoloading' => "Автозагружаемый",
     'Not loading' => "Не загружаемый",
+
+    '- check the box to activate the option' => "- отметьте галочку для активации опции",
 ];
 
 ?>

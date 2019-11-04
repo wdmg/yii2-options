@@ -45,12 +45,12 @@ class Module extends BaseModule
     /**
      * @var string the module version
      */
-    private $version = "1.5.2";
+    private $version = "1.5.3";
 
     /**
      * @var integer, priority of initialization
      */
-    private $priority = 2;
+    private $priority = 1;
 
     /**
      * @var boolean, autoload options to Yii::$app->params

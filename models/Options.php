@@ -7,6 +7,7 @@ use yii\db\Expression;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
+use yii\base\Model;
 use yii\base\InvalidArgumentException;
 use yii\behaviors\TimestampBehavior;
 
@@ -28,6 +29,7 @@ use yii\behaviors\TimestampBehavior;
 class Options extends ActiveRecord
 {
 
+    public $model;
     public $import;
     public $typeRange = ['boolean', 'integer', 'float', 'string', 'array', 'object', 'email', 'ip', 'url', 'domain', 'mac', 'regexp'];
 
@@ -325,4 +327,14 @@ class Options extends ActiveRecord
             'param' => $param,
         ];
     }
+
+
+    /**
+     * @return bool whether this widget is associated with a data model.
+     */
+    public function hasModel($model)
+    {
+        return ($model instanceof Model && $model->attributes !== null);
+    }
+
 }

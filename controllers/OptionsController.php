@@ -6,7 +6,7 @@ use Yii;
 use wdmg\options\models\Options;
 use wdmg\options\models\OptionsSearch;
 use wdmg\options\models\OptionsImport;
-use yii\helpers\ArrayHelper;
+use wdmg\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -219,7 +219,43 @@ class OptionsController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && !$model->protected) {
-            if($model->save()) {
+
+
+            if ($model->type == 'array' || $model->type == 'object') {
+
+                if (!is_array($model->value))
+                    $values = unserialize($model->value);
+                else
+                    $values = $model->value;
+
+                $post = Yii::$app->request->post('DynamicModel');
+                $attributes = self::getFlattenAttributes($values);
+                $arrayModel = self::buildDynamicModel($attributes);
+
+                $data = [];
+                foreach ($attributes as $name => $param) {
+                    if (in_array($name, array_keys($attributes)) && isset($post[$name])) {
+                        $value = $post[$name];
+                        $type = gettype(ArrayHelper::getValue($values, $name));
+                        if ($type == 'bool' || $type == 'boolean') {
+                            $value = ($post[$name] == '1') ? true : false;
+                            if ($arrayModel->validate($name))
+                                ArrayHelper::setValue($data, $name, $value);
+                        } else {
+                            settype($value, $type);
+                            if ($arrayModel->validate($name))
+                                ArrayHelper::setValue($data, $name, $value);
+                        }
+                    }
+                }
+
+                $values = ArrayHelper::merge($values, $data);
+                if ($serialized = serialize($values)) {
+                    $model->value = $serialized;
+                }
+            }
+
+            if ($model->save()) {
                 Yii::$app->getSession()->setFlash(
                     'success',
                     Yii::t(
@@ -245,12 +281,66 @@ class OptionsController extends Controller
             return $this->redirect(['index']);
         }
 
+        if ($model->type == 'array' || $model->type == 'object') {
+
+            if (!is_array($model->value))
+                $values = unserialize($model->value);
+            else
+                $values = $model->value;
+
+            $attributes = self::getFlattenAttributes($values);
+            $arrayModel = self::buildDynamicModel($attributes);
+            $arrayModel->setAttributes($attributes);
+            $arrayModel->validate();
+            $model->model = $arrayModel;
+        }
+
         return $this->render('update', [
             'model' => $model,
             'optionsTypes' => $model->getOptionsTypeList(false),
             'autoloadModes' => $model->getAutoloadModeList(false),
             'hasAutoload' => $this->hasAutoload
         ]);
+    }
+
+    private function buildDynamicModel($attributes = null) {
+
+        if (!is_array($attributes))
+            return false;
+
+        $columns = array_keys($attributes);
+        $model = new \yii\base\DynamicModel($columns);
+        foreach ($attributes as $attribute => $value) {
+            $type = gettype($value);
+            if ($type == 'array' || $type == 'object') {
+                $model->addRule($attribute, 'string');
+            } else {
+                $model->addRule($attribute, $type);
+            }
+        }
+        return $model;
+    }
+
+    private function getFlattenAttributes($attributes, $recursive = false, $origin = null) {
+
+        if (is_null($origin))
+            $origin = $attributes;
+
+        foreach ($attributes as $attribute => $value) {
+            if (is_array($value)) {
+                unset($attributes[$attribute]);
+                $attributes = array_merge($attributes, self::getFlattenAttributes($value, true, $origin));
+            } else {
+
+                if ($recursive) {
+                    unset($attributes[$attribute]);
+                    $attribute = ArrayHelper::getParents($attribute, $origin);
+                }
+
+                $attributes = array_merge($attributes, [$attribute => $value]);
+            }
+        }
+        return $attributes;
     }
 
     /**
@@ -371,4 +461,6 @@ class OptionsController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app/modules/options', 'The requested page does not exist.'));
     }
+
+
 }
