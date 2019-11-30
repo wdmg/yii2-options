@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.5.4 (2019-11-30)
+ * Added delete and deleteAll for options component
+ 
 ## 1.5.3 (2019-11-04)
  * Added edit interface for array/object options
  

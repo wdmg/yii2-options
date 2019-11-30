@@ -87,6 +87,6 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [ready to use]
+* v.1.5.4 - Added delete and deleteAll for options component
 * v.1.5.3 - Added edit interface for array/object options
 * v.1.5.2 - Added try/catch for unserialize, loading app name from params
-* v.1.5.1 - Bugfix for save options and settype for get options

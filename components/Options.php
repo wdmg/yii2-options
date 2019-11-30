@@ -7,7 +7,7 @@ namespace wdmg\options\components;
  * Yii2 Options
  *
  * @category        Component
- * @version         1.5.3
+ * @version         1.5.4
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
  * @link            https://github.com/wdmg/yii2-options
  * @copyright       Copyright (c) 2019 W.D.M.Group, Ukraine
@@ -228,9 +228,24 @@ class Options extends Component
         return $value;
     }
 
+    public function delete($option = null)
+    {
+        if (!is_null($option))
+            return $this->model->delete($this->model->tableName(), $this->model->getPropsByParam($option));
+        else
+            return null;
+    }
+
+    public function deleteAll($section = null)
+    {
+        if (!is_null($section))
+            return $this->model->deleteAll(['section' => $section]);
+        else
+            return null;
+    }
+
     public function clearCache()
     {
-
         $this->options = null;
         if ($this->cache instanceof Cache) {
             Yii::info('Cache of options has been cleared', __METHOD__);
