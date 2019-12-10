@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.5.5 (2019-12-10)
+ * Fixed deprecated class declaration
+
 ## 1.5.4 (2019-11-30)
  * Added delete and deleteAll for options component
  

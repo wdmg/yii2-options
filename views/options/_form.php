@@ -79,7 +79,7 @@ use wdmg\widgets\SelectInput;
     <?php
 
         if ($model->id) {
-            echo $form->field($model, 'type')->widget(SelectInput::className(), [
+            echo $form->field($model, 'type')->widget(SelectInput::class, [
                 'items' => $optionsTypes,
                 'options' => [
                     'class' => 'form-control',
@@ -87,7 +87,7 @@ use wdmg\widgets\SelectInput;
                 ]
             ]);
         } else {
-            echo $form->field($model, 'type')->widget(SelectInput::className(), [
+            echo $form->field($model, 'type')->widget(SelectInput::class, [
                 'items' => $optionsTypes,
                 'options' => [
                     'class' => 'form-control'
@@ -96,7 +96,7 @@ use wdmg\widgets\SelectInput;
         }
 
     ?>
-    <?= $form->field($model, 'autoload')->widget(SelectInput::className(), [
+    <?= $form->field($model, 'autoload')->widget(SelectInput::class, [
         'items' => $autoloadModes,
         'options' => [
             'class' => 'form-control'
