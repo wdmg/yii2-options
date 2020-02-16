@@ -177,10 +177,10 @@ JS
             'nextPageCssClass' => '',
             'firstPageCssClass' => 'previous',
             'lastPageCssClass' => 'next',
-            'firstPageLabel' => Yii::t('app/modules/mailer', 'First page'),
-            'lastPageLabel'  => Yii::t('app/modules/mailer', 'Last page'),
-            'prevPageLabel'  => Yii::t('app/modules/mailer', '&larr; Prev page'),
-            'nextPageLabel'  => Yii::t('app/modules/mailer', 'Next page &rarr;')
+            'firstPageLabel' => Yii::t('app/modules/options', 'First page'),
+            'lastPageLabel'  => Yii::t('app/modules/options', 'Last page'),
+            'prevPageLabel'  => Yii::t('app/modules/options', '&larr; Prev page'),
+            'nextPageLabel'  => Yii::t('app/modules/options', 'Next page &rarr;')
         ],
     ]); ?>
     <hr/>

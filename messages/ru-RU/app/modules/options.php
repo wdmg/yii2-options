@@ -83,6 +83,12 @@ return [
     'Not loading' => "Не загружаемый",
 
     '- check the box to activate the option' => "- отметьте галочку для активации опции",
+
+    'First page' => 'Первая страница',
+    'Last page' => 'Последняя страница',
+    '&larr; Prev page' => '&larr; Предыдущая страница',
+    'Next page &rarr;' => 'Следующая страница &rarr;',
+    
 ];
 
 ?>
