@@ -167,6 +167,21 @@ JS
                 return ['class' => 'changed warning'];
             }
         },
+        'pager' => [
+            'options' => [
+                'class' => 'pagination',
+            ],
+            'maxButtonCount' => 5,
+            'activePageCssClass' => 'active',
+            'prevPageCssClass' => '',
+            'nextPageCssClass' => '',
+            'firstPageCssClass' => 'previous',
+            'lastPageCssClass' => 'next',
+            'firstPageLabel' => Yii::t('app/modules/mailer', 'First page'),
+            'lastPageLabel'  => Yii::t('app/modules/mailer', 'Last page'),
+            'prevPageLabel'  => Yii::t('app/modules/mailer', '&larr; Prev page'),
+            'nextPageLabel'  => Yii::t('app/modules/mailer', 'Next page &rarr;')
+        ],
     ]); ?>
     <hr/>
     <div>
