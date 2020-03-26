@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.5.6 (2020-03-26)
+ * Up to date dependencies
+ 
 ## 1.5.5 (2019-12-10)
  * Fixed deprecated class declaration
 
