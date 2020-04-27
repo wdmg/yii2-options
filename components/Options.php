@@ -2,12 +2,11 @@
 
 namespace wdmg\options\components;
 
-
 /**
  * Yii2 Options
  *
  * @category        Component
- * @version         1.5.6
+ * @version         1.5.7
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
  * @link            https://github.com/wdmg/yii2-options
  * @copyright       Copyright (c) 2019 - 2020 W.D.M.Group, Ukraine
