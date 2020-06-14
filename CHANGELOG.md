@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.5.8 (2020-06-14)
+ * Update README.md and dependencies
+ 
 ## 1.5.7 (2020-04-28)
  * Update README.md and dependencies
  
