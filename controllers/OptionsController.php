@@ -408,12 +408,23 @@ class OptionsController extends Controller
     }
 
     public function actionExport() {
-        $filename = 'options_'.date('dmY_His').'.json';
+
         $options = Options::find()->select('section, label, param, value, type, autoload, protected')->asArray()->all();
-        Yii::$app->response->sendContentAsFile(Json::encode($options), $filename, [
-            'mimeType' => 'application/json',
-            'inline' => false
-        ])->send();
+        if ($encryptKey = Yii::$app->options->get('encryptKey')) {
+            $data = serialize($options);
+            $encryptedData = Yii::$app->getSecurity()->encryptByKey($data, $encryptKey);
+            $filename = 'options_'.date('dmY_His').'.data';
+            Yii::$app->response->sendContentAsFile($encryptedData, $filename, [
+                'mimeType' => 'multipart/encrypted',
+                'inline' => true
+            ])->send();
+        } else {
+            $filename = 'options_'.date('dmY_His').'.json';
+            Yii::$app->response->sendContentAsFile(Json::encode($options), $filename, [
+                'mimeType' => 'application/json',
+                'inline' => false
+            ])->send();
+        }
     }
 
     public function actionImport() {
@@ -421,25 +432,48 @@ class OptionsController extends Controller
         if (Yii::$app->request->isPost) {
             if($model->validate()) {
                 $import = UploadedFile::getInstance($model, 'import');
-                $options = file_get_contents($import->tempName);
-                if ($data = Json::decode($options)) {
-                    if ($model->import($data)) {
+                $data = file_get_contents($import->tempName);
+                if ($import->type == 'application/octet-stream' && $encryptKey = Yii::$app->options->get('encryptKey')) {
+                    if ($decryptedData = Yii::$app->getSecurity()->decryptByKey($data, $encryptKey)) {
+                        $options = unserialize($decryptedData);
+                        if ($model->import($options)) {
+                            Yii::$app->getSession()->setFlash(
+                                'success',
+                                Yii::t(
+                                    'app/modules/options',
+                                    'OK! Parameters successfully imported/updated.'
+                                )
+                            );
+                        }
+                    } else {
                         Yii::$app->getSession()->setFlash(
-                            'success',
+                            'danger',
                             Yii::t(
                                 'app/modules/options',
-                                'OK! Parameters successfully imported/updated.'
+                                'An error occurred while importing/updating parameters.'
                             )
                         );
                     }
                 } else {
-                    Yii::$app->getSession()->setFlash(
-                        'danger',
-                        Yii::t(
-                            'app/modules/options',
-                            'An error occurred while importing/updating parameters.'
-                        )
-                    );
+                    if ($options = Json::decode($data)) {
+                        if ($model->import($options)) {
+                            Yii::$app->getSession()->setFlash(
+                                'success',
+                                Yii::t(
+                                    'app/modules/options',
+                                    'OK! Parameters successfully imported/updated.'
+                                )
+                            );
+                        }
+                    } else {
+                        Yii::$app->getSession()->setFlash(
+                            'danger',
+                            Yii::t(
+                                'app/modules/options',
+                                'An error occurred while importing/updating parameters.'
+                            )
+                        );
+                    }
                 }
             }
         }

@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.5.9 (2020-08-29)
+ * Encrypt/decrypt options on import/export
+ 
 ## 1.5.8 (2020-06-14)
  * Update README.md and dependencies
  

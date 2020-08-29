@@ -16,7 +16,7 @@ class OptionsImport extends Options
     public function rules()
     {
         return [
-            [['import'], 'file', 'skipOnEmpty' => true, 'minSize' => 1, 'maxSize' => 512000, 'extensions' => 'json'],
+            [['import'], 'file', 'skipOnEmpty' => true, 'minSize' => 1, 'maxSize' => 512000, 'extensions' => 'json,data'],
         ];
     }
 

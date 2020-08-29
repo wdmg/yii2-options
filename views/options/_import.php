@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
             'enctype' => 'multipart/form-data'
         ]
     ]); ?>
-    <?= $form->field($model, 'import')->fileInput(['accept' => 'application/json']) ?>
+    <?= $form->field($model, 'import')->fileInput(/*['accept' => 'application/json,application/octet-stream']*/) ?>
     <div class="row">
         <div class="modal-footer" style="clear:both;display:inline-block;width:100%;padding-bottom:0;">
             <?= Html::a(Yii::t('app/modules/options', 'Close'), "#", [
