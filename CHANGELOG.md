@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.5.*
+ * Added metadata to options export file
+
 ## 1.5.9 (2020-08-29)
  * Encrypt/decrypt options on import/export
  

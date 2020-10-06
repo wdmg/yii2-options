@@ -78,6 +78,10 @@ return [
     'OK! Properties successfully updated.' => "OK! Настройки успешно обновлены.",
     'An error occurred while updating a properties.' => "Произошла ошибка при обновлении настроек.",
 
+    'Import file integrity error: The checksums of the decrypted data do not match the metadata.' => "Ошибка целостности файла импорта: контрольные суммы расшифрованных данных не совпадают с мета-данными.",
+    'The server name in the metadata does not match the current one. Perhaps the server name has been changed or the options import file is not for this application.' => "Название сервера в мета-данных не совпадает с текущим. Возможно имя сервера было изменено либо файл импорта опций не для этого приложения.",
+    'An error occurred while importing options that were previously encrypted: encryption key `encryptKey` was not found.' => "Произошла ошибка при импорте опций, которые были ранее зашифрованы: не найден ключ шифрования `encryptKey`.",
+
     'All modes' => "Всё режимы",
     'Autoloading' => "Автозагружаемый",
     'Not loading' => "Не загружаемый",

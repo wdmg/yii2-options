@@ -414,7 +414,14 @@ class OptionsController extends Controller
             $data = serialize($options);
             $encryptedData = Yii::$app->getSecurity()->encryptByKey($data, $encryptKey);
             $filename = 'options_'.date('dmY_His').'.data';
-            Yii::$app->response->sendContentAsFile($encryptedData, $filename, [
+
+            $metaData = '[meta]' . "\r\n";
+            $metaData .= "\t" . 'server: ' . Yii::$app->request->serverName . "\r\n";
+            $metaData .= "\t" . 'datetime: ' . date('Y-m-d H:i:s') . "\r\n";
+            $metaData .= "\t" . 'hash: ' . md5($data) . "\r\n";
+            $metaData .= '[/meta]' . "\r\n" . "\r\n";
+
+            Yii::$app->response->sendContentAsFile($metaData . $encryptedData, $filename, [
                 'mimeType' => 'multipart/encrypted',
                 'inline' => true
             ])->send();
@@ -434,16 +441,52 @@ class OptionsController extends Controller
                 $import = UploadedFile::getInstance($model, 'import');
                 $data = file_get_contents($import->tempName);
                 if ($import->type == 'application/octet-stream' && $encryptKey = Yii::$app->options->get('encryptKey')) {
-                    if ($decryptedData = Yii::$app->getSecurity()->decryptByKey($data, $encryptKey)) {
-                        $options = unserialize($decryptedData);
-                        if ($model->import($options)) {
+
+                    // Get meta-data
+                    $meta = [];
+                    $pattern = '/\[meta\]([^<>]*?)\[\/meta\]/is';
+                    preg_match($pattern, $data, $matches);
+                    if ($matches[0]) {
+                        preg_match_all('/(\w+:\s|$)+(.+)/im', $matches[0], $catches);
+                        foreach($catches[1] as $index => $key) {
+                            if ($catches[2][$index]) {
+                                $meta[trim(str_replace(':', '', $key))] = trim($catches[2][$index]);
+                            }
+                        }
+                    }
+
+                    // Trim data after preg_replace
+                    $data = trim(preg_replace($pattern, '', $data));
+
+                    if (isset($meta["hash"]) && $decryptedData = Yii::$app->getSecurity()->decryptByKey($data, $encryptKey)) {
+                        $hash = md5($decryptedData);
+                        if (!(Yii::$app->request->serverName === $meta["server"])) {
                             Yii::$app->getSession()->setFlash(
-                                'success',
+                                'warning',
                                 Yii::t(
                                     'app/modules/options',
-                                    'OK! Parameters successfully imported/updated.'
+                                    'The server name in the metadata does not match the current one. Perhaps the server name has been changed or the options import file is not for this application.'
                                 )
                             );
+                        } elseif (!($hash === $meta["hash"])) {
+                            Yii::$app->getSession()->setFlash(
+                                'warning',
+                                Yii::t(
+                                    'app/modules/options',
+                                    'Import file integrity error: The checksums of the decrypted data do not match the metadata.'
+                                )
+                            );
+                        } else {
+                            $options = unserialize($decryptedData);
+                            if ($model->import($options)) {
+                                Yii::$app->getSession()->setFlash(
+                                    'success',
+                                    Yii::t(
+                                        'app/modules/options',
+                                        'OK! Parameters successfully imported/updated.'
+                                    )
+                                );
+                            }
                         }
                     } else {
                         Yii::$app->getSession()->setFlash(
@@ -455,24 +498,34 @@ class OptionsController extends Controller
                         );
                     }
                 } else {
-                    if ($options = Json::decode($data)) {
-                        if ($model->import($options)) {
+                    if ($import->type == 'application/octet-stream' && !Yii::$app->options->get('encryptKey')) {
+                        Yii::$app->getSession()->setFlash(
+                            'warning',
+                            Yii::t(
+                                'app/modules/options',
+                                'An error occurred while importing options that were previously encrypted: encryption key `encryptKey` was not found.'
+                            )
+                        );
+                    } else {
+                        if ($options = Json::decode($data)) {
+                            if ($model->import($options)) {
+                                Yii::$app->getSession()->setFlash(
+                                    'success',
+                                    Yii::t(
+                                        'app/modules/options',
+                                        'OK! Parameters successfully imported/updated.'
+                                    )
+                                );
+                            }
+                        } else {
                             Yii::$app->getSession()->setFlash(
-                                'success',
+                                'danger',
                                 Yii::t(
                                     'app/modules/options',
-                                    'OK! Parameters successfully imported/updated.'
+                                    'An error occurred while importing/updating parameters.'
                                 )
                             );
                         }
-                    } else {
-                        Yii::$app->getSession()->setFlash(
-                            'danger',
-                            Yii::t(
-                                'app/modules/options',
-                                'An error occurred while importing/updating parameters.'
-                            )
-                        );
                     }
                 }
             }
