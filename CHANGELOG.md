@@ -1,7 +1,8 @@
 Changelog
 =========
 
-## 1.5.*
+## 1.6.0 (2020-10-21)
+ * Fixed string type detection for option value
  * Added metadata to options export file
 
 ## 1.5.9 (2020-08-29)

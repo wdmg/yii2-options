@@ -93,6 +93,7 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [ready to use]
+* v.1.6.0 - Fixed string type detection for option value
 * v.1.5.9 - Encrypt/decrypt options on import/export
 * v.1.5.8 - Update README.md and dependencies
 * v.1.5.7 - Update README.md and dependencies

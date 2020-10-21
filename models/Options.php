@@ -10,6 +10,7 @@ use yii\helpers\Json;
 use yii\base\Model;
 use yii\base\InvalidArgumentException;
 use yii\behaviors\TimestampBehavior;
+use wdmg\helpers\StringHelper;
 
 /**
  * This is the model class for table "{{%options}}".
@@ -31,7 +32,7 @@ class Options extends ActiveRecord
 
     public $model;
     public $import;
-    public $typeRange = ['boolean', 'integer', 'float', 'string', 'array', 'object', 'email', 'ip', 'url', 'domain', 'mac', 'regexp'];
+    public $typeRange = ['boolean', 'integer', 'float', 'string', 'array', 'object', 'email', 'ip', 'url', 'domain', 'mac', 'regexp', 'serial', 'json', 'geo'];
 
 
     /**
@@ -71,7 +72,6 @@ class Options extends ActiveRecord
             [['label'], 'string', 'max' => 255],
             [['type'], 'string', 'max' => 64],
             [['autoload', 'protected'], 'boolean'],
-            //[['autoload', 'protected'], 'default', 'value' => 0],
             [['value', 'default', 'type'], 'checkTypeOfValue'],
             ['type', 'in', 'range' => $this->typeRange],
             ['param', 'checkUniqueParamName'],
@@ -272,23 +272,35 @@ class Options extends ActiveRecord
         if (filter_var($value, FILTER_VALIDATE_FLOAT))
             return 'float';
 
-        if (filter_var($value, FILTER_VALIDATE_IP))
-            return 'ip';
-
-        if (filter_var($value, FILTER_VALIDATE_EMAIL))
-            return 'email';
-
-        if (filter_var($value, FILTER_VALIDATE_MAC))
-            return 'mac';
-
         if (is_string($value) || $type == "string") {
-            if(preg_match("/^[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$/", $value))
+
+            if (StringHelper::is_ip($value))
+                return 'ip';
+
+            if (StringHelper::is_email($value))
+                return 'email';
+
+            if (StringHelper::is_mac($value))
+                return 'mac';
+
+            if (StringHelper::is_serialized($value))
+                return 'serial';
+
+            if (StringHelper::is_json($value))
+                return 'json';
+
+            if (StringHelper::is_geo($value))
+                return 'geo';
+
+            if (StringHelper::is_domain($value))
                 return 'domain';
-            elseif (filter_var($value, FILTER_VALIDATE_URL) || preg_match("/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/", $value))
+
+            if (StringHelper::is_url($value))
                 return 'url';
 
-            if(preg_match("/^\/[\s\S]+\/[a-zA-Z]{0,6}+$/", $value))
+            if (StringHelper::is_regexp($value))
                 return 'regexp';
+
         } else {
             if (($type === 'object' || $type === 'array') && !empty($value)) {
 
@@ -305,7 +317,7 @@ class Options extends ActiveRecord
             }
         }
 
-        if($type)
+        if ($type)
             return $type;
         else
             return "string";
