@@ -66,7 +66,8 @@ class Options extends ActiveRecord
     public function rules()
     {
         return [
-            [['param', 'value', 'type'], 'required'],
+            [['param', 'type'], 'required'],
+            [['value'], 'required', 'skipOnEmpty' => true],
             [['value', 'default'], 'string'],
             [['section', 'param'], 'string', 'min' => 3, 'max' => 128],
             [['label'], 'string', 'max' => 255],
@@ -206,7 +207,7 @@ class Options extends ActiveRecord
         elseif (!isset($model->label))
             $model->label = ucfirst(strtolower(implode(preg_split('/(?<=\\w)(?=[A-Z])/', str_replace('.', ' ', $model->param), -1, PREG_SPLIT_NO_EMPTY), " ")));
 
-        if ($model->save())
+        if ($model->save(true))
             return true;
         else
             return $model->errors;
