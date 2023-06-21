@@ -6,10 +6,9 @@ namespace wdmg\options\components;
  * Yii2 Options
  *
  * @category        Component
- * @version         1.6.0
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
  * @link            https://github.com/wdmg/yii2-options
- * @copyright       Copyright (c) 2019 - 2021 W.D.M.Group, Ukraine
+ * @copyright       Copyright (c) 2019 - 2023 W.D.M.Group, Ukraine
  * @license         https://opensource.org/licenses/MIT Massachusetts Institute of Technology (MIT) License
  *
  */
@@ -151,6 +150,7 @@ class Options extends Component
                 }
             }
 
+            //if (!empty($options[$section][$param][0]) && isset($options[$section][$param][0])) {
             if (isset($options[$section][$param][0])) {
                 $value = $options[$section][$param][0];
                 if (isset($options[$section][$param][1])) {
@@ -160,6 +160,7 @@ class Options extends Component
                     return $value;
                 }
             } else {
+                //if (!empty($options[$section][$param][2])) {
                 if (isset($options[$section][$param][2])) {
                     $default = $options[$section][$param][2];
                     if (isset($options[$section][$param][1])) {
