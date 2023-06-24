@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.7.0 (2023-06-24)
+ * Some fix, update copyrights
+
 ## 1.6.0 (2020-10-21)
  * Fixed string type detection for option value
  * Added metadata to options export file

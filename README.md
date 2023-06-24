@@ -1,4 +1,4 @@
-[![Yii2](https://img.shields.io/badge/required-Yii2_v2.0.40-blue.svg)](https://packagist.org/packages/yiisoft/yii2)
+[![Yii2](https://img.shields.io/badge/required-Yii2_v2.0.35-blue.svg)](https://packagist.org/packages/yiisoft/yii2)
 [![Downloads](https://img.shields.io/packagist/dt/wdmg/yii2-options.svg)](https://packagist.org/packages/wdmg/yii2-options)
 [![Packagist Version](https://img.shields.io/packagist/v/wdmg/yii2-options.svg)](https://packagist.org/packages/wdmg/yii2-options)
 ![Progress](https://img.shields.io/badge/progress-ready_to_use-green.svg)
@@ -11,11 +11,11 @@ Storing application options in DB with runtime autoload and accessibility from Y
 
 This module is an integral part of the [Butterfly.СMS](https://butterflycms.com/) content management system, but can also be used as an standalone extension.
 
-Copyrights (c) 2019-2021 [W.D.M.Group, Ukraine](https://wdmg.com.ua/)
+Copyrights (c) 2019-2023 [W.D.M.Group, Ukraine](https://wdmg.com.ua/)
 
 # Requirements
 * PHP 5.6 or higher
-* Yii2 v.2.0.40 and newest
+* Yii2 v.2.0.35 and newest
 * [Yii2 Base](https://github.com/wdmg/yii2-base) module (required)
 * [Yii2 SelectInput](https://github.com/wdmg/yii2-selectinput) widget
 
@@ -93,11 +93,7 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [ready to use]
+* v.1.7.0 - Some fix, update copyrights
 * v.1.6.0 - Fixed string type detection for option value
 * v.1.5.9 - Encrypt/decrypt options on import/export
 * v.1.5.8 - Update README.md and dependencies
-* v.1.5.7 - Update README.md and dependencies
-* v.1.5.6 - Up to date dependencies
-* v.1.5.5 - Fixed deprecated class declaration
-* v.1.5.4 - Added delete and deleteAll for options component
-* v.1.5.3 - Added edit interface for array/object options

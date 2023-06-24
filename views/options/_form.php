@@ -73,7 +73,7 @@ use wdmg\widgets\SelectInput;
             echo Html::label(Yii::t('app/modules/options', 'Default'), '#innerOptionDefault');
             echo '<pre>' . var_export(unserialize($model->default), true) . '</pre>';
         } else {
-            echo $form->field($model, 'default')->textarea(['rows' => 6, 'disabled' => (($model->id) ? true : false)]);
+            echo $form->field($model, 'default')->textarea(['rows' => 6, 'disabled' => true]);
         }
     ?>
     <?php

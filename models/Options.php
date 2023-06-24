@@ -66,8 +66,7 @@ class Options extends ActiveRecord
     public function rules()
     {
         return [
-            [['param', 'type'], 'required'],
-            [['value'], 'required', 'skipOnEmpty' => true],
+            [['param', 'value', 'type'], 'required'],
             [['value', 'default'], 'string'],
             [['section', 'param'], 'string', 'min' => 3, 'max' => 128],
             [['label'], 'string', 'max' => 255],
